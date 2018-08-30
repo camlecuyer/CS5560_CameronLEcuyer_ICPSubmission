@@ -1,0 +1,10 @@
+a.	The dog saw John in   the park
+PoS	Det N   V   Pro  Prop Det N
+Entity	John
+CoRef	None
+
+
+b.	The little bear saw the fine fat trout in   the rocky brook.
+PoS	Det Adj	   N    V   Det Adj  Adj N     Prop Det Adj   N
+Enity	None
+CoRef	None
