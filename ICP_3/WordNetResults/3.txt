@@ -1,0 +1,402 @@
+pollen
+n
+a
+n
+major
+a n v
+respiratory
+a
+allergen
+n
+in
+n a r
+distribution
+n
+oak
+n
+expected
+a
+increase
+n v
+by
+r
+ecological
+a
+succession
+n
+climate
+n
+climate
+n
+change
+n v
+increasing
+a
+also
+r
+known
+a
+amplify
+v
+allergy
+n
+risk
+n v
+weed
+n v
+pollen
+n
+by
+r
+inducing
+n
+elevated
+a n
+allergenic
+a
+protein
+n
+impact
+n v
+concentration
+n
+on
+r a
+tree
+v n
+pollen
+n
+not
+r
+clearly
+r
+understood
+a
+due
+a n r
+experimental
+a
+in
+n a r
+out
+a v r n
+extended
+a
+study
+n v
+response
+n
+pollen
+n
+production
+n
+sawtooth
+n
+oak
+n
+elevated
+a n
+ambient
+a
+three
+n a
+chambers
+n
+at
+n
+in
+n a r
+utilized
+a
+daytime
+n
+ambient
+a
+chamber
+n v
+three
+n a
+sawtooth
+n
+oak
+n
+planted
+a
+in
+n a r
+or
+n
+two
+n a
+chamber
+n v
+matured
+a
+bloom
+n v
+in
+n a r
+six
+n a
+selected
+a
+tree
+v n
+polyethylene
+n
+attached
+a
+collect
+v n a r
+pollen
+n
+total
+v n a
+number
+n v
+tree
+v n
+number
+n v
+weight
+n v
+pollen
+n
+catkin
+n
+a
+n
+1
+n a
+make
+v n
+an
+n
+kit
+n v
+by
+r
+antigen
+n
+in
+n a r
+pollen
+n
+pollen
+n
+tree
+v n
+significant
+a
+increase
+n v
+treatment
+n
+protein
+n
+contents
+n
+at
+n
+also
+r
+significant
+a
+increase
+n v
+12
+n a
+respectively
+r
+treatment
+n
+induced
+a
+significant
+a
+difference
+n
+treatment
+n
+in
+n a r
+terms
+n
+pollen
+n
+production
+n
+allergenic
+a
+protein
+n
+treatment
+n
+mixed
+a
+oak
+n
+under
+r a
+elevated
+a n
+are
+n
+expected
+a
+in
+n a r
+changing
+a
+significantly
+r
+higher
+a
+amount
+n v
+pollen
+n
+allergenic
+a
+protein
+n
+under
+r a
+present
+v n a
+air
+n v
+pollen:aeciospore,ascospore,basidiospore,carpospore,chlamydospore,conidiospore,conidium,endospore,fern seed,macrospore
+a:A,AB,ADP,AMP,ATP,B,C,D,E,F
+major:better,leading,major(,prima,senior,star,starring,stellar
+respiratory:
+allergen:adulterant,adulterator,agent,antigen,assay,carcinogen,chemical irritant,denaturant,digestive,elixir
+in:440 yards,880 yards,Al,Am,Ba,Be,Bi,Bk,Ca,Cd
+distribution:Bernoulli distribution,Gaussian distribution,IPO,Poisson distribution,abidance,acquiring,action,activity,actuation,allocation
+oak:Acrocarpus fraxinifolius,Adenanthera pavonina,Aegiceras majus,African sandalwood,African walnut,Alstonia scholaris,American olive,American turkey oak,Andaman marble,Australian nettle
+expected:anticipated,awaited,due,expectable,hoped-for,matter-of-course,unsurprising
+increase:acceleration,accession,accretion,accrual,accruement,accumulation,action,activity,addition,advance
+by:aside,away,past
+ecological:bionomic,bionomical,ecologic
+succession:Stations,Stations of the Cross,absorption,acceptance,acidification,actinide series,adiabatic process,aeration,alphabetisation,alphabetization
+climate:absolution,ambiance,ambience,amyotonia,anchorage,ascendance,ascendancy,ascendence,ascendency,astigmatism
+climate:absolution,ambiance,ambience,amyotonia,anchorage,ascendance,ascendancy,ascendence,ascendency,astigmatism
+change:Coriolis effect,Maundy money,about-face,acceleration,accenting,accentuation,accessory,accident,accompaniment,accomplishment
+increasing:accelerando,accelerative,acceleratory,accretionary,accretive,augmentative,crescendo,incorporative,maximising,maximizing
+also:as well,besides,likewise,too
+known:acknowledged,best-known,better-known,celebrated,famed,familiar,famous,far-famed,glorious,identified
+amplify:advance,aggrandise,aggrandize,augment,beat around the bush,betray,blow,blow up,bluster,boast
+allergy:allergic reaction,allergic rhinitis,anaphylaxis,atopic allergy,atopy,delayed allergy,food allergy,hives,immediate allergy,nettle rash
+risk:campaign,cause,chance,conditional probability,contingent probability,crapshoot,cross section,crusade,danger,drive
+weed:Acapulco gold,Agrostemma githago,Alternanthera philoxeroides,Barbarea vulgaris,Barnaby's thistle,California dandelion,Canadian fleabane,Centaurea solstitialis,Conyza canadensis,Erechtites hieracifolia
+pollen:aeciospore,ascospore,basidiospore,carpospore,chlamydospore,conidiospore,conidium,endospore,fern seed,macrospore
+by:aside,away,past
+inducing:coercion,compulsion,corruption,inducement,induction,influence,initiation,sending,trigger
+elevated:exalted,grand,high-flown,high-minded,idealistic,increased,lofty,noble,noble-minded,raised
+allergenic:
+protein:PSA,actomyosin,aleurone,amyloid,antibody,apoenzyme,capsid,carbohydrate,compound protein,conjugated protein
+impact:Coriolis effect,affaire d'honneur,affray,aftereffect,aftermath,backwash,bandwagon effect,banging,battering,beating
+concentration:M,absorption,actinism,age,alertness,analyticity,anisotropy,aroma,assiduity,assiduousness
+on:along
+tree:afforest,bed,canalise,canalize,channel,checkrow,conn,corner,crab,dibble
+pollen:aeciospore,ascospore,basidiospore,carpospore,chlamydospore,conidiospore,conidium,endospore,fern seed,macrospore
+not:non
+clearly:clear,distinctly,intelligibly,understandably
+understood:appreciated,apprehended,comprehended,implicit,inexplicit,interpreted,silent,tacit,taken
+due:ascribable,attributable,callable,cod,collect,collectable,collectible,delinquent,expected,imputable
+experimental:data-based,empiric,empirical,observational
+in:440 yards,880 yards,Al,Am,Ba,Be,Bi,Bk,Ca,Cd
+out:KO'd,dead,down,exterior,extinct,forbidden,impermissible,impossible,kayoed,knocked out
+extended:big,drawn-out,elongated,extensive,figurative,large,lengthened,lengthy,long,nonliteral
+study:PM,adagio,allegretto,allegro,allometry,andante,anechoic chamber,antechamber,anteroom,applied science
+response:Bill of Rights,Coriolis effect,Fere phenomenon,GSR,Tarchanoff phenomenon,ablactation,account,address,affirmation,aftereffect
+pollen:aeciospore,ascospore,basidiospore,carpospore,chlamydospore,conidiospore,conidium,endospore,fern seed,macrospore
+production:abidance,acquiring,action,activity,actuation,addition,art,artistic creation,artistic production,assessment
+sawtooth:
+oak:Acrocarpus fraxinifolius,Adenanthera pavonina,Aegiceras majus,African sandalwood,African walnut,Alstonia scholaris,American olive,American turkey oak,Andaman marble,Australian nettle
+elevated:exalted,grand,high-flown,high-minded,idealistic,increased,lofty,noble,noble-minded,raised
+ambient:close
+three:0,1,2,3,4,5,6,7,8,9
+chambers:Chambers,Sir William Chambers,William Chambers
+at:Ac,Ar,As,At,B,Bh,Br,C,Cl,Db
+in:440 yards,880 yards,Al,Am,Ba,Be,Bi,Bk,Ca,Cd
+utilized:used,utilised
+daytime:Golden Age,Indian summer,Olympiad,Platonic year,Saint Martin's summer,afternoon,age,air alert,bimester,bimillenary
+ambient:close
+chamber:Areopagus,Bench,States General,abdomen,abdominal cavity,air lock,air-raid shelter,airlock,amniotic cavity,anechoic chamber
+three:0,1,2,3,4,5,6,7,8,9
+sawtooth:
+oak:Acrocarpus fraxinifolius,Adenanthera pavonina,Aegiceras majus,African sandalwood,African walnut,Alstonia scholaris,American olive,American turkey oak,Andaman marble,Australian nettle
+planted:constituted,cropped,deep-rooted,deep-seated,established,implanted,ingrained,naturalised,naturalized,potbound
+in:440 yards,880 yards,Al,Am,Ba,Be,Bi,Bk,Ca,Cd
+or:Beaver State,ER,OR,Oregon,emergency room,operating room,operating theater,operating theatre,recovery room,surgery
+two:0,1,2,3,4,5,6,7,8,9
+chamber:Areopagus,Bench,States General,abdomen,abdominal cavity,air lock,air-raid shelter,airlock,amniotic cavity,anechoic chamber
+matured:developed,full-blown,mature
+bloom:Golden Age,Indian summer,Krebs citric acid cycle,Krebs cycle,Olympiad,Platonic year,Saint Martin's summer,absorption,activity,adaptation
+in:440 yards,880 yards,Al,Am,Ba,Be,Bi,Bk,Ca,Cd
+six:0,1,2,3,4,5,6,7,8,9
+selected:elect,elite
+tree:afforest,bed,canalise,canalize,channel,checkrow,conn,corner,crab,dibble
+polyethylene:acrylate resin,acrylic,acrylic resin,alkyd,alkyd resin,allyl resin,epoxy,epoxy glue,epoxy resin,melamine resin
+attached:affiliated,bespoken,betrothed,committed,connected,intended,involved,loving,related,related to
+collect:accept,accumulate,acquire,adopt,amass,archive,assume,attach,bale,bear
+pollen:aeciospore,ascospore,basidiospore,carpospore,chlamydospore,conidiospore,conidium,endospore,fern seed,macrospore
+total:abound,accept,account,account for,act,add,add together,add up,adhere,adorn
+number:4to,8vo,ABA transit number,Arabic numeral,BIN,Crown,Fibonacci number,Hindu numeral,Hindu-Arabic numeral,I.D.
+tree:afforest,bed,canalise,canalize,channel,checkrow,conn,corner,crab,dibble
+number:4to,8vo,ABA transit number,Arabic numeral,BIN,Crown,Fibonacci number,Hindu numeral,Hindu-Arabic numeral,I.D.
+weight:Americana,Beaufort scale,Brinell number,Brix scale,H,MFLOP,MIPS,S,absolute viscosity,absorptance
+pollen:aeciospore,ascospore,basidiospore,carpospore,chlamydospore,conidiospore,conidium,endospore,fern seed,macrospore
+catkin:ament,corymb,cyme,flower cluster,flower head,spike,umbel
+a:A,AB,ADP,AMP,ATP,B,C,D,E,F
+1:0,2,3,4,5,6,7,8,9,Captain Hicks
+make:Americanise,Americanize,Europeanise,Europeanize,Frenchify,Islamise,Islamize,abound,abstract,accelerate
+an:AA,AAS,AN,Associate in Applied Science,Associate in Arts,Associate in Nursing
+kit:baby,baggage,billfold,briefcase,bullock,calf,cardcase,carpenter's kit,cigarette case,compact
+by:aside,away,past
+antigen:Rh,Rh factor,adulterant,adulterator,agent,agglutinogen,allergen,anatoxin,assay,carcinogen
+in:440 yards,880 yards,Al,Am,Ba,Be,Bi,Bk,Ca,Cd
+pollen:aeciospore,ascospore,basidiospore,carpospore,chlamydospore,conidiospore,conidium,endospore,fern seed,macrospore
+pollen:aeciospore,ascospore,basidiospore,carpospore,chlamydospore,conidiospore,conidium,endospore,fern seed,macrospore
+tree:afforest,bed,canalise,canalize,channel,checkrow,conn,corner,crab,dibble
+significant:considerable,earthshaking,epoch-making,epochal,evidential,evidentiary,fundamental,important,large,meaning
+increase:acceleration,accession,accretion,accrual,accruement,accumulation,action,activity,addition,advance
+treatment:G-Jo,High Renaissance,Romantic Movement,Romanticism,TLC,acupressure,acupuncture,administration,authorisation,authorization
+protein:PSA,actomyosin,aleurone,amyloid,antibody,apoenzyme,capsid,carbohydrate,compound protein,conjugated protein
+contents:A-list,FAQ,actuarial table,agenda,agendum,bibliography,bill,black book,blacklist,calendar
+at:Ac,Ar,As,At,B,Bh,Br,C,Cl,Db
+also:as well,besides,likewise,too
+significant:considerable,earthshaking,epoch-making,epochal,evidential,evidentiary,fundamental,important,large,meaning
+increase:acceleration,accession,accretion,accrual,accruement,accumulation,action,activity,addition,advance
+12:10,100,1000,10000,100000,1000000,1000000000,1000000000000,11,120
+respectively:severally
+treatment:G-Jo,High Renaissance,Romantic Movement,Romanticism,TLC,acupressure,acupuncture,administration,authorisation,authorization
+induced:elicited,evoked,iatrogenic
+significant:considerable,earthshaking,epoch-making,epochal,evidential,evidentiary,fundamental,important,large,meaning
+difference:Fibonacci number,ability,accuracy,addend,adequacy,air,allomerism,amorality,appearance,arability
+treatment:G-Jo,High Renaissance,Romantic Movement,Romanticism,TLC,acupressure,acupuncture,administration,authorisation,authorization
+in:440 yards,880 yards,Al,Am,Ba,Be,Bi,Bk,Ca,Cd
+terms:Holy Order,Order,asking price,bar sinister,bastardy,bid price,borrowing cost,capital expenditure,cash price,caste
+pollen:aeciospore,ascospore,basidiospore,carpospore,chlamydospore,conidiospore,conidium,endospore,fern seed,macrospore
+production:abidance,acquiring,action,activity,actuation,addition,art,artistic creation,artistic production,assessment
+allergenic:
+protein:PSA,actomyosin,aleurone,amyloid,antibody,apoenzyme,capsid,carbohydrate,compound protein,conjugated protein
+treatment:G-Jo,High Renaissance,Romantic Movement,Romanticism,TLC,acupressure,acupuncture,administration,authorisation,authorization
+mixed:assorted,heterogeneous,heterogenous,integrated,interracial,miscellaneous,motley,sundry
+oak:Acrocarpus fraxinifolius,Adenanthera pavonina,Aegiceras majus,African sandalwood,African walnut,Alstonia scholaris,American olive,American turkey oak,Andaman marble,Australian nettle
+under:below
+elevated:exalted,grand,high-flown,high-minded,idealistic,increased,lofty,noble,noble-minded,raised
+are:acre,agate line,ar,arpent,b,barn,centare,column inch,dessiatine,em
+expected:anticipated,awaited,due,expectable,hoped-for,matter-of-course,unsurprising
+in:440 yards,880 yards,Al,Am,Ba,Be,Bi,Bk,Ca,Cd
+changing:dynamic,dynamical,ever-changing
+significantly:importantly
+higher:high
+amount:absolute magnitude,accounts receivable,advance,amount of money,amplitude,attribute,binomial,bulk,capital,cash advance
+pollen:aeciospore,ascospore,basidiospore,carpospore,chlamydospore,conidiospore,conidium,endospore,fern seed,macrospore
+allergenic:
+protein:PSA,actomyosin,aleurone,amyloid,antibody,apoenzyme,capsid,carbohydrate,compound protein,conjugated protein
+under:below
+present:accord,account,acquaint,act,add,administer,advise,allot,allow,animalise
+air:Bach,Beethoven,Brahms,Chopin,Cl,Eden,Edgeworth-Kuiper belt,F,Gilbert and Sullivan,H

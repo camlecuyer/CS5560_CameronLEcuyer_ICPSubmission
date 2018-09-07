@@ -1,0 +1,294 @@
+in
+n a r
+study
+n v
+research
+n v
+role
+n
+new
+a r
+such
+a r
+as
+n r
+may
+n
+form
+n v
+a
+n
+target
+n v
+novel
+n a
+treatment
+n
+serum
+n
+allergic
+a
+rhinitis
+n
+measured
+a
+using
+n
+sensitization
+n
+demonstrated
+a
+by
+r
+skin
+n v
+prick
+v n
+only
+r a
+olive
+n a
+tree
+v n
+sensitivity
+n
+seasonal
+n a
+only
+r a
+mite
+n
+sensitivity
+n
+included
+a
+in
+n a r
+study
+n v
+perennial
+a n
+clinic
+n
+severity
+n
+demonstrated
+a
+by
+r
+nasal
+n a
+symptom
+n
+scores
+n
+65
+a
+31
+a
+34
+a
+31
+a
+healthy
+a
+in
+n a r
+between
+r
+patient
+n a
+group
+n v
+control
+n v
+group
+n v
+detected
+a
+as
+n r
+high
+n a r
+in
+n a r
+patient
+n a
+detected
+a
+as
+n r
+low
+a n v r
+in
+n a r
+patient
+n a
+correlation
+n
+analysis
+n
+made
+a
+between
+r
+prick
+v n
+test
+v n
+cytokine
+n
+in
+n a r
+patient
+n a
+a
+n
+negative
+a n v
+correlation
+n
+detected
+a
+only
+r a
+between
+r
+level
+n v a
+by
+r
+literature
+n
+made
+a
+us
+n
+think
+v n
+cell
+n
+have
+v n
+an
+n
+important
+a
+role
+n
+in
+n a r
+thought
+n
+future
+a n
+be
+v n
+subject
+n v a
+will
+n v
+form
+n v
+new
+a r
+in
+n a r
+in:440 yards,880 yards,Al,Am,Ba,Be,Bi,Bk,Ca,Cd
+study:PM,adagio,allegretto,allegro,allometry,andante,anechoic chamber,antechamber,anteroom,applied science
+research:analysis,calculation,canvass,computation,count,counting,empirical research,empiricism,enquiry,enumeration
+role:acting,activating,activation,actus reus,aid,animation,assignment,assist,assistance,attempt
+new:Modern,New,bran-new,brand-new,current,early,fresh,hot,inexperienced,inexperient
+such:much
+as:AS,Ac,American Samoa,Ar,As,At,B,Bh,Br,C
+may:Apr,April,Aug,August,Crataegus aestivalis,Crataegus apiifolia,Crataegus biltmoreana,Crataegus calpodendron,Crataegus coccinea,Crataegus coccinea mollis
+form:Adapid,Adapid group,Amentiferae,Centrospermae,Midas touch,Omomyid,Omomyid group,Phycomycetes,Phycomycetes group,Pteridospermae
+a:A,AB,ADP,AMP,ATP,B,C,D,E,F
+target:aim,badminton equipment,baseball equipment,basketball equipment,bench mark,benchmark,birthplace,bourn,bourne,boxing equipment
+novel:album,coffee-table book,detective novel,dime novel,dystopia,fantasy,folio,hardback,hardcover,journal
+treatment:G-Jo,High Renaissance,Romantic Movement,Romanticism,TLC,acupressure,acupuncture,administration,authorisation,authorization
+serum:ECF,amnionic fluid,amniotic fluid,antiserum,aqueous humor,aqueous humour,black bile,blood,blood serum,cerebrospinal fluid
+allergic:hypersensitised,hypersensitive,hypersensitized,sensitised,sensitized,supersensitised,supersensitive,supersensitized,susceptible
+rhinitis:adenitis,allergic rhinitis,alveolitis,angiitis,aortitis,appendicitis,arteritis,balanitis,balanoposthitis,blepharitis
+measured:calculated,careful,deliberate,intended,mensurable,mensural,metric,metrical,rhythmic,rhythmical
+using:abuse,annoyance,annoying,blaxploitation,colonialism,disregard,exploitation,harassment,ill-treatment,ill-usage
+sensitization:action,activity,biological process,chelation,dealignment,decrease,decrement,defining,degeneration,development
+demonstrated:incontestable,incontestible
+by:aside,away,past
+skin:Klein bottle,Mobius strip,agnail,air bag,areolar tissue,back pack,backpack,bacon rind,banana peel,banana skin
+prick:anger,ask for,bite,bruise,catch,cock up,discomfit,discompose,disconcert,draw
+only:alone,but,entirely,exclusively,just,merely,only if,only when,simply,solely
+olive:Chinese date,Chinese jujube,European olive tree,May apple,Olea cunninghamii,Olea europaea,Olea lanceolata,Panama redwood,Turkish boxwood,accessory fruit
+tree:afforest,bed,canalise,canalize,channel,checkrow,conn,corner,crab,dibble
+sensitivity:H,Midas touch,S,absorption factor,absorptivity,acuteness,adaptability,affect,affection,affectionateness
+seasonal:accumulator,assistant,beater,bill poster,bill sticker,blackleg,bleacher,boater,boatman,carter
+only:alone,but,entirely,exclusively,just,merely,only if,only when,simply,solely
+mite:acarid,acarus,bit,couple,crumb,dab,diddley,diddly,diddly-shit,diddly-squat
+sensitivity:H,Midas touch,S,absorption factor,absorptivity,acuteness,adaptability,affect,affection,affectionateness
+included:enclosed
+in:440 yards,880 yards,Al,Am,Ba,Be,Bi,Bk,Ca,Cd
+study:PM,adagio,allegretto,allegro,allometry,andante,anechoic chamber,antechamber,anteroom,applied science
+perennial:continual,long,recurrent,repeated
+clinic:baseball clinic,basketball clinic,closed session,dispensary,executive session,extended care facility,eye clinic,hearing,hockey clinic,hospital
+severity:Puritanism,asperity,austereness,badness,bareness,burdensomeness,chasteness,distressfulness,effortfulness,emphasis
+demonstrated:incontestable,incontestible
+by:aside,away,past
+nasal:Wormian bone,alveolar,alveolar consonant,anklebone,arcus zygomaticus,aspirate,astragal,astragalus,bare bone,bonelet
+symptom:Jacquemier's sign,Kayser-Fleischer ring,Kernig's sign,Koplik's spots,abscess,acetonemia,acetonuria,ague,albuminuria,alkalinuria
+scores:all get out,barrels,batch,battalion,billion,billy-ho,billyo,billyoh,boatload,busload
+65:cardinal,lxv,sixty-five
+31:cardinal,thirty-one,xxxi
+34:cardinal,thirty-four,xxxiv
+31:cardinal,thirty-one,xxxi
+healthy:anicteric,bouncing,considerable,firm,fit,florid,flushed,full-blooded,good,good for you
+in:440 yards,880 yards,Al,Am,Ba,Be,Bi,Bk,Ca,Cd
+between:'tween,betwixt
+patient:affected role,agent,agentive role,alexic,analysand,anorectic,anorexic,arthritic,benefactive role,beneficiary
+group:Abelian group,Mandelbrot set,accumulation,actinide,actinoid,actinon,acyl,acyl group,aggregation,alcohol group
+control:New Deal,ablactation,absolution,absolutism,acting,action,action mechanism,activating,activation,actuator
+group:Abelian group,Mandelbrot set,accumulation,actinide,actinoid,actinon,acyl,acyl group,aggregation,alcohol group
+detected:heard,noticed,perceived,sensed
+as:AS,Ac,American Samoa,Ar,As,At,B,Bh,Br,C
+high:SPF,academy,amplitude level,birthplace,bliss,blissfulness,caliber,calibre,cloud nine,composite school
+in:440 yards,880 yards,Al,Am,Ba,Be,Bi,Bk,Ca,Cd
+patient:affected role,agent,agentive role,alexic,analysand,anorectic,anorexic,arthritic,benefactive role,beneficiary
+detected:heard,noticed,perceived,sensed
+as:AS,Ac,American Samoa,Ar,As,At,B,Bh,Br,C
+low:abject,alto,baritone,bass,blue,broken,contemptible,contrabass,contralto,crushed
+in:440 yards,880 yards,Al,Am,Ba,Be,Bi,Bk,Ca,Cd
+patient:affected role,agent,agentive role,alexic,analysand,anorectic,anorexic,arthritic,benefactive role,beneficiary
+correlation:Pearson product-moment correlation coefficient,biometrics,biometry,biostatistics,biserial correlation,biserial correlation coefficient,chance-half correlation,coefficient of correlation,complementarity,correlation coefficient
+analysis:Fourier analysis,allegory,analytic thinking,anatomy,anticipation,argument,argumentation,bathos,behavior modification,behavior therapy
+made:ready-made,successful
+between:'tween,betwixt
+prick:anger,ask for,bite,bruise,catch,cock up,discomfit,discompose,disconcert,draw
+test:abound,accept,account,account for,act,add up,adhere,adjudge,adorn,amount
+cytokine:PSA,TNF,actomyosin,aleurone,amyloid,antibody,apoenzyme,capsid,compound protein,conjugated protein
+in:440 yards,880 yards,Al,Am,Ba,Be,Bi,Bk,Ca,Cd
+patient:affected role,agent,agentive role,alexic,analysand,anorectic,anorexic,arthritic,benefactive role,beneficiary
+a:A,AB,ADP,AMP,ATP,B,C,D,E,F
+negative:Gram-negative,antagonistic,bad,charged,counter,damaging,destructive,disadvantageous,disconfirming,disinclined
+correlation:Pearson product-moment correlation coefficient,biometrics,biometry,biostatistics,biserial correlation,biserial correlation coefficient,chance-half correlation,coefficient of correlation,complementarity,correlation coefficient
+detected:heard,noticed,perceived,sensed
+only:alone,but,entirely,exclusively,just,merely,only if,only when,simply,solely
+between:'tween,betwixt
+level:A level,GCSE,General Certificate of Secondary Education,Klein bottle,Mobius strip,O level,SPF,acme,actinism,action
+by:aside,away,past
+literature:Sanskrit literature,adaptation,architecture,autograph,bowdlerisation,bowdlerization,classics,comparative literature,criticism,cryptogram
+made:ready-made,successful
+us:America,U.S.,U.S.A.,US,USA,United States,United States of America,the States
+think:Americanise,Americanize,Europeanise,Europeanize,Frenchify,Islamise,Islamize,absorb,accelerate,accept
+cell:Cottrell precipitator,Holy Roman Empire,Kupffer's cell,Leydig cell,Leydig's cell,PO Box,POB,Palestine Authority,Palestine National Authority,Palestinian National Authority
+have:Americanise,Americanize,abound,accept,ace,acetylate,acetylise,acetylize,acquire,adapt
+an:AA,AAS,AN,Associate in Applied Science,Associate in Arts,Associate in Nursing
+important:Copernican,all important,all-important,alpha,authoritative,beta,big,burning,cardinal,central
+role:acting,activating,activation,actus reus,aid,animation,assignment,assist,assistance,attempt
+in:440 yards,880 yards,Al,Am,Ba,Be,Bi,Bk,Ca,Cd
+thought:abstract thought,acculturation,article of faith,autotelism,belief,burden,center,centre,cerebration,cogitation
+future:approaching,coming,early,emerging,forthcoming,future day,in store,incoming,next,prospective
+be:abound,accept,account,account for,act,add up,adhere,adorn,agree,amount
+subject:African,Amerindian,Aquarius,Archer,Aries,Balance,Black,Black person,Bull,Cancer
+will:New Testament,Old Testament,acquittance,act,affidavit,arraignment,articles of incorporation,assignment,attention,authorisation
+form:Adapid,Adapid group,Amentiferae,Centrospermae,Midas touch,Omomyid,Omomyid group,Phycomycetes,Phycomycetes group,Pteridospermae
+new:Modern,New,bran-new,brand-new,current,early,fresh,hot,inexperienced,inexperient
+in:440 yards,880 yards,Al,Am,Ba,Be,Bi,Bk,Ca,Cd

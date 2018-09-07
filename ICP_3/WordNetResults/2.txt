@@ -1,0 +1,357 @@
+immunotherapy
+n
+a
+n
+treatment
+n
+option
+n
+respiratory
+a
+allergy
+n
+complementary
+a n
+a
+n
+distinct
+a
+mechanism
+n
+subcutaneous
+a
+administration
+n
+enable
+v
+safely
+r
+considered
+a
+an
+n
+clinical
+a
+sublingual
+a
+immunotherapy
+n
+tablet
+n
+an
+n
+orally
+r
+pharmaceutical
+a n
+formulation
+n
+standardized
+a
+have
+v n
+developed
+a
+sublingual
+a
+immunotherapy
+n
+house
+n v
+dust
+v n
+mite
+n
+a
+n
+tablet
+n
+treatment
+n
+be
+v n
+after
+r a
+first
+n a r
+dose
+n v
+under
+r a
+supervision
+n
+a
+n
+physician
+n
+experience
+v n
+in
+n a r
+diagnosis
+n
+treatment
+n
+allergic
+a
+first
+n a r
+dose
+n v
+adequately
+r
+subsequent
+a
+may
+n
+be
+v n
+have
+v n
+proven
+a
+efficacy
+n
+allergic
+a
+rhinitis
+n
+conjunctivitis
+n
+allergic
+a
+asthma
+n
+in
+n a r
+allergic
+a
+indicate
+v
+have
+v n
+superior
+a n
+or
+n
+similar
+a
+efficacy
+n
+seasonal
+n a
+superior
+a n
+efficacy
+n
+perennial
+a n
+have
+v n
+also
+r
+demonstrated
+a
+clinically
+r
+relevant
+a
+significant
+a
+in
+n a r
+daily
+a r n
+corticosteroid
+n
+risk
+n v
+asthma
+n
+asthma
+n
+are
+n
+generally
+r
+well
+r n a v
+a
+n
+low
+a n v r
+risk
+n v
+systemic
+a
+allergic
+a
+most
+r a
+common
+a n
+adverse
+a
+are
+n
+oral
+a n
+evidence
+n v
+be
+v n
+considered
+a
+as
+n r
+an
+n
+alternative
+a n
+or
+n
+add-on
+n
+treatment
+n
+may
+n
+include
+v
+early
+a r
+intervention
+n
+prevent
+v
+development
+n
+or
+n
+progression
+n
+allergic
+a
+disease
+n
+in
+n a r
+immunotherapy:EMDA,HRT,actinotherapy,aromatherapy,botanical medicine,chemotherapy,correction,electric healing,electrical healing,electromotive drug administration
+a:A,AB,ADP,AMP,ATP,B,C,D,E,F
+treatment:G-Jo,High Renaissance,Romantic Movement,Romanticism,TLC,acupressure,acupuncture,administration,authorisation,authorization
+option:Hobson's choice,accenting,accentuation,accomplishment,achievement,aggression,alienation,alternative,application,arrival
+respiratory:
+allergy:allergic reaction,allergic rhinitis,anaphylaxis,atopic allergy,atopy,delayed allergy,food allergy,hives,immediate allergy,nettle rash
+complementary:additive,antonymous,complemental,completing
+a:A,AB,ADP,AMP,ATP,B,C,D,E,F
+distinct:chiseled,clean-cut,clear,clear-cut,crisp,crystalline,decided,defined,definite,different
+mechanism:Aristotelianism,Confucianism,Daoism,Kinetoscope,Neoplatonism,PTO,Platonism,Scholasticism,Stoicism,Taoism
+subcutaneous:hypodermic
+administration:Christendom,Christianity,College of Cardinals,Curia,Sacred College,acculturation,antipyresis,appeasement,authorisation,authorization
+enable:Americanise,Americanize,Europeanise,Europeanize,Frenchify,Islamise,Islamize,accelerate,accustom,acerbate
+safely:
+considered:advised,well-advised
+an:AA,AAS,AN,Associate in Applied Science,Associate in Arts,Associate in Nursing
+clinical:nonsubjective,objective
+sublingual:
+immunotherapy:EMDA,HRT,actinotherapy,aromatherapy,botanical medicine,chemotherapy,correction,electric healing,electrical healing,electromotive drug administration
+tablet:abacus,art paper,blotter,blotting paper,blueprint paper,bolus,booster,booster dose,booster shot,butcher block
+an:AA,AAS,AN,Associate in Applied Science,Associate in Arts,Associate in Nursing
+orally:by word of mouth
+pharmaceutical:pharmaceutic
+formulation:Americanism,Anglicism,Briticism,Britishism,U308,acceptor,acid,actualisation,actualization,adduct
+standardized:exchangeable,interchangeable,replaceable,similar,standard,standardised
+have:Americanise,Americanize,abound,accept,ace,acetylate,acetylise,acetylize,acquire,adapt
+developed:formulated,highly-developed,improved,industrial,mature,matured
+sublingual:
+immunotherapy:EMDA,HRT,actinotherapy,aromatherapy,botanical medicine,chemotherapy,correction,electric healing,electrical healing,electromotive drug administration
+house:Aleut,British House of Commons,British House of Lords,Circassian,Congress,Dail,Dail Eireann,Duma,Eden,Edgeworth-Kuiper belt
+dust:aerosolise,aerosolize,aluminise,aluminize,apply,bank,bark,bedaub,beplaster,besmear
+mite:acarid,acarus,bit,couple,crumb,dab,diddley,diddly,diddly-shit,diddly-squat
+a:A,AB,ADP,AMP,ATP,B,C,D,E,F
+tablet:abacus,art paper,blotter,blotting paper,blueprint paper,bolus,booster,booster dose,booster shot,butcher block
+treatment:G-Jo,High Renaissance,Romantic Movement,Romanticism,TLC,acupressure,acupuncture,administration,authorisation,authorization
+be:abound,accept,account,account for,act,add up,adhere,adorn,agree,amount
+after:afterward,afterwards,later,later on,subsequently
+first:archidiaconate,arrival time,back,baronetcy,barony,beginning,billionth,birth,catcher,center
+dose:APC,Antabuse,Atromid-S,Carafate,Cupid's disease,Cupid's itch,Cuprimine,Drixoral,Elvis,Fosamax
+under:below
+supervision:administration,authorisation,authorization,canalisation,canalization,channelisation,channelization,conducting,database management,disenfranchisement
+a:A,AB,ADP,AMP,ATP,B,C,D,E,F
+physician:Dr.,GP,MD,abortionist,allergist,angiologist,dental practitioner,dentist,doc,doctor
+experience:Americanise,Americanize,acetylate,acetylise,acetylize,acquire,adapt,adjust,adopt,alkalinise
+in:440 yards,880 yards,Al,Am,Ba,Be,Bi,Bk,Ca,Cd
+diagnosis:blood typing,diagnosing,medical diagnosis,uranalysis,urinalysis
+treatment:G-Jo,High Renaissance,Romantic Movement,Romanticism,TLC,acupressure,acupuncture,administration,authorisation,authorization
+allergic:hypersensitised,hypersensitive,hypersensitized,sensitised,sensitized,supersensitised,supersensitive,supersensitized,susceptible
+first:archidiaconate,arrival time,back,baronetcy,barony,beginning,billionth,birth,catcher,center
+dose:APC,Antabuse,Atromid-S,Carafate,Cupid's disease,Cupid's itch,Cuprimine,Drixoral,Elvis,Fosamax
+adequately:
+subsequent:accompanying,attendant,concomitant,consequent,ensuant,incidental,later,posterior,resultant,sequent
+may:Apr,April,Aug,August,Crataegus aestivalis,Crataegus apiifolia,Crataegus biltmoreana,Crataegus calpodendron,Crataegus coccinea,Crataegus coccinea mollis
+be:abound,accept,account,account for,act,add up,adhere,adorn,agree,amount
+have:Americanise,Americanize,abound,accept,ace,acetylate,acetylise,acetylize,acquire,adapt
+proven:established,evidenced,proved,tested,tried,verified,well-tried
+efficacy:efficaciousness,incisiveness,trenchancy
+allergic:hypersensitised,hypersensitive,hypersensitized,sensitised,sensitized,supersensitised,supersensitive,supersensitized,susceptible
+rhinitis:adenitis,allergic rhinitis,alveolitis,angiitis,aortitis,appendicitis,arteritis,balanitis,balanoposthitis,blepharitis
+conjunctivitis:adenitis,alveolitis,angiitis,aortitis,appendicitis,arteritis,balanitis,balanoposthitis,blepharitis,bursitis
+allergic:hypersensitised,hypersensitive,hypersensitized,sensitised,sensitized,supersensitised,supersensitive,supersensitized,susceptible
+asthma:ARDS,SARS,adult respiratory distress syndrome,asthma attack,atypical pneumonia,bronchial asthma,bronchitis,cold,common cold,emphysema
+in:440 yards,880 yards,Al,Am,Ba,Be,Bi,Bk,Ca,Cd
+allergic:hypersensitised,hypersensitive,hypersensitized,sensitised,sensitized,supersensitised,supersensitive,supersensitized,susceptible
+indicate:account,acquaint,advise,air,announce,annunciate,apprise,apprize,argue,augur
+have:Americanise,Americanize,abound,accept,ace,acetylate,acetylise,acetylize,acquire,adapt
+superior:A-one,ace,arch,banner,best,blue-ribbon,boss,brag,brilliant,capital
+or:Beaver State,ER,OR,Oregon,emergency room,operating room,operating theater,operating theatre,recovery room,surgery
+similar:akin,alike,analogous,confusable,connatural,correspondent,corresponding,exchangeable,interchangeable,kindred
+efficacy:efficaciousness,incisiveness,trenchancy
+seasonal:accumulator,assistant,beater,bill poster,bill sticker,blackleg,bleacher,boater,boatman,carter
+superior:A-one,ace,arch,banner,best,blue-ribbon,boss,brag,brilliant,capital
+efficacy:efficaciousness,incisiveness,trenchancy
+perennial:continual,long,recurrent,repeated
+have:Americanise,Americanize,abound,accept,ace,acetylate,acetylise,acetylize,acquire,adapt
+also:as well,besides,likewise,too
+demonstrated:incontestable,incontestible
+clinically:
+relevant:applicable,germane,pertinent
+significant:considerable,earthshaking,epoch-making,epochal,evidential,evidentiary,fundamental,important,large,meaning
+in:440 yards,880 yards,Al,Am,Ba,Be,Bi,Bk,Ca,Cd
+daily:casual,day-after-day,day-by-day,day-to-day,everyday,informal,periodic,periodical
+corticosteroid:Aldactone,Aristocort,Aristopak,Cortef,Cortone Acetate,Decadron,Dexamethasone Intensol,Dexone,Hexadrol,Hydrocortone
+risk:campaign,cause,chance,conditional probability,contingent probability,crapshoot,cross section,crusade,danger,drive
+asthma:ARDS,SARS,adult respiratory distress syndrome,asthma attack,atypical pneumonia,bronchial asthma,bronchitis,cold,common cold,emphysema
+asthma:ARDS,SARS,adult respiratory distress syndrome,asthma attack,atypical pneumonia,bronchial asthma,bronchitis,cold,common cold,emphysema
+are:acre,agate line,ar,arpent,b,barn,centare,column inch,dessiatine,em
+generally:broadly,broadly speaking,by and large,in general,in the main,loosely,more often than not,mostly
+well:advantageously,comfortably,considerably,easily,good,intimately,substantially
+a:A,AB,ADP,AMP,ATP,B,C,D,E,F
+low:abject,alto,baritone,bass,blue,broken,contemptible,contrabass,contralto,crushed
+risk:campaign,cause,chance,conditional probability,contingent probability,crapshoot,cross section,crusade,danger,drive
+systemic:general
+allergic:hypersensitised,hypersensitive,hypersensitized,sensitised,sensitized,supersensitised,supersensitive,supersensitized,susceptible
+most:about,almost,near,nearly,nigh,to the highest degree,virtually,well-nigh
+common:average,coarse,communal,democratic,demotic,familiar,frequent,general,grassroots,inferior
+adverse:contrary,inauspicious,unfavorable,unfavourable,untoward
+are:acre,agate line,ar,arpent,b,barn,centare,column inch,dessiatine,em
+oral:buccal,spoken,unwritten
+evidence:acquaintance,ammunition,arcanum,argument,attestation,background,background knowledge,circumstance,circumstantial evidence,clew
+be:abound,accept,account,account for,act,add up,adhere,adorn,agree,amount
+considered:advised,well-advised
+as:AS,Ac,American Samoa,Ar,As,At,B,Bh,Br,C
+an:AA,AAS,AN,Associate in Applied Science,Associate in Arts,Associate in Nursing
+alternative:alternate,disjunctive,secondary,substitute,unconventional
+or:Beaver State,ER,OR,Oregon,emergency room,operating room,operating theater,operating theatre,recovery room,surgery
+add-on:accessory,addition,additive,afterthought,annex,annexe,appurtenance,attachment,audio,auto accessory
+treatment:G-Jo,High Renaissance,Romantic Movement,Romanticism,TLC,acupressure,acupuncture,administration,authorisation,authorization
+may:Apr,April,Aug,August,Crataegus aestivalis,Crataegus apiifolia,Crataegus biltmoreana,Crataegus calpodendron,Crataegus coccinea,Crataegus coccinea mollis
+include:abide,abstract,add on,adjoin,admit,allow,allow in,appreciate,attach to,authorise
+early:Old,aboriginal,advance,archaean,archaeozoic,archaic,archean,archeozoic,azoic,beforehand
+intervention:G-Jo,Monroe Doctrine,TLC,Truman doctrine,action,action at law,acupressure,acupuncture,adoption,appeal
+prevent:avert,avoid,baffle,bilk,blank,block,blockade,cross,debar,defend
+development:British East Africa,British West Africa,Krebs citric acid cycle,Krebs cycle,above,absorption,abuse,acceleration,action,activity
+or:Beaver State,ER,OR,Oregon,emergency room,operating room,operating theater,operating theatre,recovery room,surgery
+progression:Stations,Stations of the Cross,actinide series,advance,advancement,approach,approaching,arithmetic progression,ascending,ascension
+allergic:hypersensitised,hypersensitive,hypersensitized,sensitised,sensitized,supersensitised,supersensitive,supersensitized,susceptible
+disease:Indian tick fever,Kawasaki disease,Kenya fever,Marseilles fever,Meniere's disease,aeroembolism,ague,air embolism,amyloidosis,animal disease
+in:440 yards,880 yards,Al,Am,Ba,Be,Bi,Bk,Ca,Cd

@@ -13,14 +13,29 @@ object WordNetSpark {
     val sc = new SparkContext(conf)
 
 
-    val data=sc.textFile("data/sample")
+    //val data=sc.textFile("data/abstract_text/1.txt")
+    //val data=sc.textFile("data/abstract_text/2.txt")
+    //val data=sc.textFile("data/abstract_text/3.txt")
+    val data=sc.textFile("data/abstract_text/4.txt")
+    //val data=sc.textFile("data/abstract_text/5.txt")
 
-    val dd=data.map(f=>{
+    val dd=data.map(line=>{
       val wordnet = new RiWordNet("C:\\WordNet\\WordNet-3.0")
-      val farr=f.split(" ")
-      getSynoymns(wordnet,"retriever")
+      val wordSet=line.split(" ")
+      val synarr=wordSet.map(word=>{
+        if(wordnet.exists(word))
+          (word,getSynoymns(wordnet,word))
+        else
+          (word,null)
+      })
+      synarr
     })
-    dd.take(1).foreach(f=>println(f.mkString(" ")))
+    dd.collect().foreach(linesyn=>{
+      linesyn.foreach(wordssyn=>{
+        if(wordssyn._2 != null)
+          println(wordssyn._1+":"+wordssyn._2.mkString(","))
+      })
+    })
   }
   def getSynoymns(wordnet:RiWordNet,word:String): Array[String] ={
     println(word)

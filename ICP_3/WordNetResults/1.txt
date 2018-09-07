@@ -1,0 +1,417 @@
+practice
+n v
+needs
+r
+a
+n
+common
+a n
+parameter
+n
+can
+n v
+provide
+v
+an
+n
+reliable
+a
+estimation
+n
+outcome
+n
+sublingual
+a
+immunotherapy
+n
+in
+n a r
+an
+n
+upcoming
+a
+pollen
+n
+conjunctival
+a
+provocation
+n
+test
+v n
+can
+n v
+predict
+v
+beneficial
+a
+outcome
+n
+in
+n a r
+allergic
+a
+after
+r a
+two
+n a
+separate
+v a n
+age
+n v
+received
+a
+placebo
+n
+or
+n
+tree
+v n
+or
+n
+grass
+v n
+pollen
+n
+divided
+a
+two
+n a
+according
+a
+after
+r a
+two
+n a
+regard
+n v
+clinical
+a
+outcome
+n
+combined
+a
+total
+v n a
+symptom
+n
+total
+v n a
+rescue
+v n
+medication
+n
+well
+r n a v
+pollen
+n
+season
+n v
+or
+n
+entire
+a n
+global
+a
+therapy
+n
+after
+r a
+completing
+a
+treatment
+n
+also
+r
+tree
+v n
+pollen
+n
+trial
+n
+randomized
+a
+76
+a
+received
+a
+suitable
+a
+post
+v n
+grass
+v n
+pollen
+n
+trial
+n
+included
+a
+90
+n a
+82
+a
+44
+a
+who
+n
+after
+r a
+who
+n
+show
+v n
+a
+n
+reaction
+n
+total
+v n a
+combined
+a
+score
+n v
+as
+n r
+well
+r n a v
+as
+n r
+total
+v n a
+symptom
+n
+score
+n v
+peak
+n v
+significantly
+r
+lower
+v n
+in
+n a r
+group
+n v
+tree
+v n
+pollen
+n
+grass
+v n
+pollen
+n
+group
+n v
+treatment
+n
+significantly
+r
+better
+n a v r
+clinically
+r
+meaningful
+a
+outcome
+n
+pollen
+n
+both
+a
+independently
+r
+led
+n
+similar
+a
+comparing
+n
+after
+r a
+beginning
+n a
+suggest
+v
+an
+n
+early
+a r
+estimation
+n
+allergic
+a
+before
+r
+an
+n
+upcoming
+a
+can
+n v
+be
+v n
+used
+a
+as
+n r
+a
+n
+valuable
+a n
+parameter
+n
+predict
+v
+beneficial
+a
+outcome
+n
+ongoing
+a
+registered
+a
+numbers
+n
+pollen
+n
+pollen
+n
+practice:ability,abuse,acting,activating,activation,actus reus,agency,aid,animation,application
+needs:inevitably,necessarily,of necessity
+a:A,AB,ADP,AMP,ATP,B,C,D,E,F
+common:average,coarse,communal,democratic,demotic,familiar,frequent,general,grassroots,inferior
+parameter:RF,URL,amount,argument,binomial,characteristic root of a square matrix,constant,constant quantity,degree of freedom,eigenvalue
+can:Dumpster,W.C.,abdomen,acoustic buoy,adnexa,ambulacrum,ampulla,anatomical structure,anechoic chamber,annexa
+provide:accommodate,accord,administer,afford,air-condition,air-cool,allot,allow,allow for,alphabetize
+an:AA,AAS,AN,Associate in Applied Science,Associate in Arts,Associate in Nursing
+reliable:authentic,certain,dependable,honest,sure,tested,time-tested,tried,tried and true,true
+estimation:adjudication,appraisal,approximation,capitalisation,capitalization,conversion,coupon,credit,credit rating,dead reckoning
+outcome:Coriolis effect,Z,aftereffect,aftermath,backwash,bandwagon effect,branch,brisance,butterfly effect,by-product
+sublingual:
+immunotherapy:EMDA,HRT,actinotherapy,aromatherapy,botanical medicine,chemotherapy,correction,electric healing,electrical healing,electromotive drug administration
+in:440 yards,880 yards,Al,Am,Ba,Be,Bi,Bk,Ca,Cd
+an:AA,AAS,AN,Associate in Applied Science,Associate in Arts,Associate in Nursing
+upcoming:approaching,coming,forthcoming,future
+pollen:aeciospore,ascospore,basidiospore,carpospore,chlamydospore,conidiospore,conidium,endospore,fern seed,macrospore
+conjunctival:
+provocation:abetment,abettal,advancement,aggravation,aggro,bitchery,bullying,cheering,fosterage,fostering
+test:abound,accept,account,account for,act,add up,adhere,adjudge,adorn,amount
+can:Dumpster,W.C.,abdomen,acoustic buoy,adnexa,ambulacrum,ampulla,anatomical structure,anechoic chamber,annexa
+predict:anticipate,augur,auspicate,bet,betoken,bode,calculate,call,forebode,forecast
+beneficial:advantageous,good
+outcome:Coriolis effect,Z,aftereffect,aftermath,backwash,bandwagon effect,branch,brisance,butterfly effect,by-product
+in:440 yards,880 yards,Al,Am,Ba,Be,Bi,Bk,Ca,Cd
+allergic:hypersensitised,hypersensitive,hypersensitized,sensitised,sensitized,supersensitised,supersensitive,supersensitized,susceptible
+after:afterward,afterwards,later,later on,subsequently
+two:0,1,2,3,4,5,6,7,8,9
+separate:Americanise,Americanize,Balkanise,Balkanize,acetylate,acetylise,acetylize,acquire,adapt,adjust
+age:Golden Age,Indian summer,Jazz Age,Olympiad,Platonic year,Saint Martin's summer,actinism,adolescence,adulthood,aeon
+received:acceptable,classical,conventional,standard
+placebo:APC,Antabuse,Atromid-S,Carafate,Cuprimine,Drixoral,Fosamax,HAART,Imuran,Inocor
+or:Beaver State,ER,OR,Oregon,emergency room,operating room,operating theater,operating theatre,recovery room,surgery
+tree:afforest,bed,canalise,canalize,channel,checkrow,conn,corner,crab,dibble
+or:Beaver State,ER,OR,Oregon,emergency room,operating room,operating theater,operating theatre,recovery room,surgery
+grass:account,acquaint,advise,aluminise,aluminize,announce,apply,apprise,apprize,bank
+pollen:aeciospore,ascospore,basidiospore,carpospore,chlamydospore,conidiospore,conidium,endospore,fern seed,macrospore
+divided:bicameral,bifid,bifurcate,bifurcated,bilocular,biloculate,biramous,bisulcate,black-and-white,branched
+two:0,1,2,3,4,5,6,7,8,9
+according:accordant,reported
+after:afterward,afterwards,later,later on,subsequently
+two:0,1,2,3,4,5,6,7,8,9
+regard:acceptance,advertence,advertency,afternoon,attachment,attentiveness,calling card,card,celebrity,clock-watching
+clinical:nonsubjective,objective
+outcome:Coriolis effect,Z,aftereffect,aftermath,backwash,bandwagon effect,branch,brisance,butterfly effect,by-product
+combined:compounded,conglomerate,occluded,one,rolled into one,sorbed
+total:abound,accept,account,account for,act,add,add together,add up,adhere,adorn
+symptom:Jacquemier's sign,Kayser-Fleischer ring,Kernig's sign,Koplik's spots,abscess,acetonemia,acetonuria,ague,albuminuria,alkalinuria
+total:abound,accept,account,account for,act,add,add together,add up,adhere,adorn
+rescue:arrogate,assume,deliver,despoil,extort,foray,loot,pillage,plunder,ransack
+medication:APC,Antabuse,Atromid-S,Carafate,Cuprimine,Drixoral,EMDA,Feosol,Fergon,Fosamax
+well:advantageously,comfortably,considerably,easily,good,intimately,substantially
+pollen:aeciospore,ascospore,basidiospore,carpospore,chlamydospore,conidiospore,conidium,endospore,fern seed,macrospore
+season:Advent,Allhallowtide,Christmas,Christmastide,Christmastime,Eastertide,Golden Age,Indian summer,Lammastide,Lent
+or:Beaver State,ER,OR,Oregon,emergency room,operating room,operating theater,operating theatre,recovery room,surgery
+entire:full,intact,integral,smooth,total,uncastrated,whole
+global:ball-shaped,circular,globose,globular,international,orbicular,planetary,round,spheric,spherical
+therapy:EMDA,HRT,actinotherapy,aftercare,allopathy,anticoagulation,aromatherapy,bandaging,binding,bloodletting
+after:afterward,afterwards,later,later on,subsequently
+completing:additive,complemental,complementary
+treatment:G-Jo,High Renaissance,Romantic Movement,Romanticism,TLC,acupressure,acupuncture,administration,authorisation,authorization
+also:as well,besides,likewise,too
+tree:afforest,bed,canalise,canalize,channel,checkrow,conn,corner,crab,dibble
+pollen:aeciospore,ascospore,basidiospore,carpospore,chlamydospore,conidiospore,conidium,endospore,fern seed,macrospore
+trial:MOT,MOT test,Ministry of Transportation test,Scopes trial,Snellen test,action,action at law,adoption,alpha test,appeal
+randomized:irregular,randomised
+76:cardinal,lxxvi,seventy-six
+received:acceptable,classical,conventional,standard
+suitable:desirable,eligible,fit,suited,worthy
+post:FTP,accession,advance,advertise,advertize,agitate,airmail,asterisk,beat,bespot
+grass:account,acquaint,advise,aluminise,aluminize,announce,apply,apprise,apprize,bank
+pollen:aeciospore,ascospore,basidiospore,carpospore,chlamydospore,conidiospore,conidium,endospore,fern seed,macrospore
+trial:MOT,MOT test,Ministry of Transportation test,Scopes trial,Snellen test,action,action at law,adoption,alpha test,appeal
+included:enclosed
+90:10,100,1000,10000,100000,1000000,1000000000,1000000000000,11,12
+82:cardinal,eighty-two,lxxxii
+44:cardinal,forty-four,xliv
+who:Centre for International Crime Prevention,DCCP,FAO,Food and Agriculture Organization,Food and Agriculture Organization of the United Nations,GATT,General Agreement on Tariffs and Trade,IAEA,IBRD,ICAO
+after:afterward,afterwards,later,later on,subsequently
+who:Centre for International Crime Prevention,DCCP,FAO,Food and Agriculture Organization,Food and Agriculture Organization of the United Nations,GATT,General Agreement on Tariffs and Trade,IAEA,IBRD,ICAO
+show:abduce,accent,accentuate,account,acquaint,adduce,advise,animalise,animalize,announce
+a:A,AB,ADP,AMP,ATP,B,C,D,E,F
+reaction:Coriolis force,Fere phenomenon,GSR,Lorentz force,Tarchanoff phenomenon,ablactation,acylation,addition reaction,aerodynamic force,affinity
+total:abound,accept,account,account for,act,add,add together,add up,adhere,adorn
+combined:compounded,conglomerate,occluded,one,rolled into one,sorbed
+score:Cartesian product,Fibonacci number,account,addend,arity,arrears,atomic number,augend,bad debt,bang
+as:AS,Ac,American Samoa,Ar,As,At,B,Bh,Br,C
+well:advantageously,comfortably,considerably,easily,good,intimately,substantially
+as:AS,Ac,American Samoa,Ar,As,At,B,Bh,Br,C
+total:abound,accept,account,account for,act,add,add together,add up,adhere,adorn
+symptom:Jacquemier's sign,Kayser-Fleischer ring,Kernig's sign,Koplik's spots,abscess,acetonemia,acetonuria,ague,albuminuria,alkalinuria
+score:Cartesian product,Fibonacci number,account,addend,arity,arrears,atomic number,augend,bad debt,bang
+peak:Golden Age,Indian summer,Olympiad,Platonic year,Saint Martin's summer,acme,age,air alert,apex,bill
+significantly:importantly
+lower:Americanise,Americanize,Europeanise,Europeanize,Frenchify,Islamise,Islamize,abate,abbreviate,abridge
+in:440 yards,880 yards,Al,Am,Ba,Be,Bi,Bk,Ca,Cd
+group:Abelian group,Mandelbrot set,accumulation,actinide,actinoid,actinon,acyl,acyl group,aggregation,alcohol group
+tree:afforest,bed,canalise,canalize,channel,checkrow,conn,corner,crab,dibble
+pollen:aeciospore,ascospore,basidiospore,carpospore,chlamydospore,conidiospore,conidium,endospore,fern seed,macrospore
+grass:account,acquaint,advise,aluminise,aluminize,announce,apply,apprise,apprize,bank
+pollen:aeciospore,ascospore,basidiospore,carpospore,chlamydospore,conidiospore,conidium,endospore,fern seed,macrospore
+group:Abelian group,Mandelbrot set,accumulation,actinide,actinoid,actinon,acyl,acyl group,aggregation,alcohol group
+treatment:G-Jo,High Renaissance,Romantic Movement,Romanticism,TLC,acupressure,acupuncture,administration,authorisation,authorization
+significantly:importantly
+better:benefit,bettor,bookie,bookmaker,caller,crap-shooter,crapshooter,croupier,desirability,desirableness
+clinically:
+meaningful:important,meaning,meaty,pregnant,purposeful,significant,substantive
+outcome:Coriolis effect,Z,aftereffect,aftermath,backwash,bandwagon effect,branch,brisance,butterfly effect,by-product
+pollen:aeciospore,ascospore,basidiospore,carpospore,chlamydospore,conidiospore,conidium,endospore,fern seed,macrospore
+both:some
+independently:severally
+led:LED,OLED,light-emitting diode,organic light-emitting diode
+similar:akin,alike,analogous,confusable,connatural,correspondent,corresponding,exchangeable,interchangeable,kindred
+comparing:PM,analogy,audit,autopsy,bank examination,checkup,collation,comparison,confrontation,contrast
+after:afterward,afterwards,later,later on,subsequently
+beginning:McBurney's point,abutment,accident,accompaniment,activation,aeration,alteration,antinode,appearance,arousal
+suggest:accent,accentuate,account,acquaint,adumbrate,advance,advert,advise,advocate,affirm
+an:AA,AAS,AN,Associate in Applied Science,Associate in Arts,Associate in Nursing
+early:Old,aboriginal,advance,archaean,archaeozoic,archaic,archean,archeozoic,azoic,beforehand
+estimation:adjudication,appraisal,approximation,capitalisation,capitalization,conversion,coupon,credit,credit rating,dead reckoning
+allergic:hypersensitised,hypersensitive,hypersensitized,sensitised,sensitized,supersensitised,supersensitive,supersensitized,susceptible
+before:ahead,earlier,in front
+an:AA,AAS,AN,Associate in Applied Science,Associate in Arts,Associate in Nursing
+upcoming:approaching,coming,forthcoming,future
+can:Dumpster,W.C.,abdomen,acoustic buoy,adnexa,ambulacrum,ampulla,anatomical structure,anechoic chamber,annexa
+be:abound,accept,account,account for,act,add up,adhere,adorn,agree,amount
+used:exploited,ill-used,in use,misused,old,put-upon,secondhand,utilised,utilized,victimised
+as:AS,Ac,American Samoa,Ar,As,At,B,Bh,Br,C
+a:A,AB,ADP,AMP,ATP,B,C,D,E,F
+valuable:blue-chip,expensive,important,invaluable,of import,precious,priceless,rich,semiprecious,worth
+parameter:RF,URL,amount,argument,binomial,characteristic root of a square matrix,constant,constant quantity,degree of freedom,eigenvalue
+predict:anticipate,augur,auspicate,bet,betoken,bode,calculate,call,forebode,forecast
+beneficial:advantageous,good
+outcome:Coriolis effect,Z,aftereffect,aftermath,backwash,bandwagon effect,branch,brisance,butterfly effect,by-product
+ongoing:current,on-going
+registered:certified,documented,qualified,recorded
+numbers:Book of Numbers,Numbers,lucky dip,numbers game,numbers pool,numbers racket,raffle,sweepstakes,tombola
+pollen:aeciospore,ascospore,basidiospore,carpospore,chlamydospore,conidiospore,conidium,endospore,fern seed,macrospore
+pollen:aeciospore,ascospore,basidiospore,carpospore,chlamydospore,conidiospore,conidium,endospore,fern seed,macrospore

@@ -1,0 +1,435 @@
+tree
+v n
+sublingual
+a
+immunotherapy
+n
+allergen
+n
+major
+a n v
+allergen
+n
+v
+n a
+1
+n a
+birch
+n v a
+pollen
+n
+currently
+r
+being
+n
+developed
+a
+treatment
+n
+tree
+v n
+allergic
+a
+or
+n
+aim
+v n
+trial
+n
+investigate
+v
+efficacy
+n
+safety
+n
+tree
+v n
+study
+n v
+a
+n
+trial
+n
+in
+n a r
+total
+v n a
+randomized
+a
+equally
+r
+receive
+v
+placebo
+n
+or
+n
+treatment
+n
+tree
+v n
+in
+n a r
+or
+n
+12
+n a
+development
+n
+before
+r
+onset
+n
+birch
+n v a
+pollen
+n
+season
+n v
+continued
+a
+throughout
+r
+a
+n
+total
+v n a
+duration
+n
+at
+n
+least
+n a r
+6
+n a
+tree
+v n
+pollen
+n
+season
+n v
+medication
+n
+use
+n v
+on
+r a
+a
+n
+daily
+a r n
+basis
+n
+in
+n a r
+an
+n
+electronic
+a
+weekly
+n a r
+quality
+n a
+life
+n
+also
+r
+average
+a n v
+daily
+a r n
+symptom
+n
+score
+n v
+difference
+n
+between
+r
+active
+a n
+treatment
+n
+placebo
+n
+statistically
+r
+significant
+a
+7
+n a
+group
+n v
+no
+r n a
+clear
+v a n r
+tree
+v n
+induced
+a
+baseline
+n
+in
+n a r
+statistically
+r
+significant
+a
+placebo
+n
+at
+n
+all
+a r
+time
+n v
+a
+n
+clear
+v a n r
+relationship
+n
+birch
+n v a
+specific
+a n
+tree
+v n
+well
+r n a v
+majority
+n
+adverse
+a
+being
+n
+mild
+a
+or
+n
+moderate
+v a n
+in
+n a r
+most
+r a
+frequently
+r
+reported
+a
+adverse
+a
+generally
+r
+related
+a
+sublingual
+a
+administration
+n
+tablet
+n
+in
+n a r
+oral
+a n
+trial
+n
+suggest
+v
+tree
+v n
+in
+n a r
+up
+a r v
+12
+n a
+a
+n
+profile
+n v
+suitable
+a
+indicate
+v
+a
+n
+but
+r
+clinical
+a
+efficacy
+n
+probably
+r
+due
+a n r
+low
+a n v r
+pollen
+n
+emphasizing
+n
+importance
+n
+pollen
+n
+exposure
+n
+outcome
+n
+a
+n
+pollen
+n
+allergy
+n
+immunotherapy
+n
+tree:afforest,bed,canalise,canalize,channel,checkrow,conn,corner,crab,dibble
+sublingual:
+immunotherapy:EMDA,HRT,actinotherapy,aromatherapy,botanical medicine,chemotherapy,correction,electric healing,electrical healing,electromotive drug administration
+allergen:adulterant,adulterator,agent,antigen,assay,carcinogen,chemical irritant,denaturant,digestive,elixir
+major:better,leading,major(,prima,senior,star,starring,stellar
+allergen:adulterant,adulterator,agent,antigen,assay,carcinogen,chemical irritant,denaturant,digestive,elixir
+v:0,1,2,3,4,5,6,7,8,9
+1:0,2,3,4,5,6,7,8,9,Captain Hicks
+birch:Acrocarpus fraxinifolius,Adenanthera pavonina,Aegiceras majus,African sandalwood,African walnut,Alstonia scholaris,American dwarf birch,American gray birch,American grey birch,American olive
+pollen:aeciospore,ascospore,basidiospore,carpospore,chlamydospore,conidiospore,conidium,endospore,fern seed,macrospore
+currently:presently
+being:action,activeness,activity,actuality,aerobe,agency,aliveness,amphidiploid,anaerobe,animal
+developed:formulated,highly-developed,improved,industrial,mature,matured
+treatment:G-Jo,High Renaissance,Romantic Movement,Romanticism,TLC,acupressure,acupuncture,administration,authorisation,authorization
+tree:afforest,bed,canalise,canalize,channel,checkrow,conn,corner,crab,dibble
+allergic:hypersensitised,hypersensitive,hypersensitized,sensitised,sensitized,supersensitised,supersensitive,supersensitized,susceptible
+or:Beaver State,ER,OR,Oregon,emergency room,operating room,operating theater,operating theatre,recovery room,surgery
+aim:address,aspire,be after,calculate,charge,deploy,design,direct,draw a bead on,dress
+trial:MOT,MOT test,Ministry of Transportation test,Scopes trial,Snellen test,action,action at law,adoption,alpha test,appeal
+investigate:anatomize,appraise,assay,audit,check,check into,check out,check over,check up on,compare
+efficacy:efficaciousness,incisiveness,trenchancy
+safety:IUD,Kinetoscope,PTO,absolution,acoustic device,adapter,adaptor,aerofoil,afterburner,agglomerator
+tree:afforest,bed,canalise,canalize,channel,checkrow,conn,corner,crab,dibble
+study:PM,adagio,allegretto,allegro,allometry,andante,anechoic chamber,antechamber,anteroom,applied science
+a:A,AB,ADP,AMP,ATP,B,C,D,E,F
+trial:MOT,MOT test,Ministry of Transportation test,Scopes trial,Snellen test,action,action at law,adoption,alpha test,appeal
+in:440 yards,880 yards,Al,Am,Ba,Be,Bi,Bk,Ca,Cd
+total:abound,accept,account,account for,act,add,add together,add up,adhere,adorn
+randomized:irregular,randomised
+equally:as,evenly,every bit
+receive:Americanise,Americanize,abide by,absorb,abstract,accept,acetylate,acetylise,acetylize,ache
+placebo:APC,Antabuse,Atromid-S,Carafate,Cuprimine,Drixoral,Fosamax,HAART,Imuran,Inocor
+or:Beaver State,ER,OR,Oregon,emergency room,operating room,operating theater,operating theatre,recovery room,surgery
+treatment:G-Jo,High Renaissance,Romantic Movement,Romanticism,TLC,acupressure,acupuncture,administration,authorisation,authorization
+tree:afforest,bed,canalise,canalize,channel,checkrow,conn,corner,crab,dibble
+in:440 yards,880 yards,Al,Am,Ba,Be,Bi,Bk,Ca,Cd
+or:Beaver State,ER,OR,Oregon,emergency room,operating room,operating theater,operating theatre,recovery room,surgery
+12:10,100,1000,10000,100000,1000000,1000000000,1000000000000,11,120
+development:British East Africa,British West Africa,Krebs citric acid cycle,Krebs cycle,above,absorption,abuse,acceleration,action,activity
+before:ahead,earlier,in front
+onset:adrenarche,alpha,amphibious operation,attack,banzai attack,banzai charge,blitz,blitzkrieg,bombardment,bombing
+birch:Acrocarpus fraxinifolius,Adenanthera pavonina,Aegiceras majus,African sandalwood,African walnut,Alstonia scholaris,American dwarf birch,American gray birch,American grey birch,American olive
+pollen:aeciospore,ascospore,basidiospore,carpospore,chlamydospore,conidiospore,conidium,endospore,fern seed,macrospore
+season:Advent,Allhallowtide,Christmas,Christmastide,Christmastime,Eastertide,Golden Age,Indian summer,Lammastide,Lent
+continued:continuing
+throughout:end-to-end,passim
+a:A,AB,ADP,AMP,ATP,B,C,D,E,F
+total:abound,accept,account,account for,act,add,add together,add up,adhere,adorn
+duration:GMT,Golden Age,Greenwich Mean Time,Greenwich Time,Indian summer,Olympiad,Platonic year,Saint Martin's summer,UT,UT1
+at:Ac,Ar,As,At,B,Bh,Br,C,Cl,Db
+least:
+6:0,1,2,3,4,5,7,8,9,Captain Hicks
+tree:afforest,bed,canalise,canalize,channel,checkrow,conn,corner,crab,dibble
+pollen:aeciospore,ascospore,basidiospore,carpospore,chlamydospore,conidiospore,conidium,endospore,fern seed,macrospore
+season:Advent,Allhallowtide,Christmas,Christmastide,Christmastime,Eastertide,Golden Age,Indian summer,Lammastide,Lent
+medication:APC,Antabuse,Atromid-S,Carafate,Cuprimine,Drixoral,EMDA,Feosol,Fergon,Fosamax
+use:Americanism,Anglicism,Britishism,Germanism,abuse,acting,activating,activation,actus reus,aid
+on:along
+a:A,AB,ADP,AMP,ATP,B,C,D,E,F
+daily:casual,day-after-day,day-by-day,day-to-day,everyday,informal,periodic,periodical
+basis:balance,base,basic assumption,butt,common ground,conclusion,constatation,cornerstone,detail,footing
+in:440 yards,880 yards,Al,Am,Ba,Be,Bi,Bk,Ca,Cd
+an:AA,AAS,AN,Associate in Applied Science,Associate in Arts,Associate in Nursing
+electronic:
+weekly:bimonthly,biweekly,monthly,quarterly,semimonthly,semiweekly
+quality:SPF,ability,accuracy,adequacy,air,amorality,amplitude level,appearance,arability,aridity
+life:African,Amerindian,Aquarius,Archer,Aries,Balance,Black,Black person,Bull,Cancer
+also:as well,besides,likewise,too
+average:common,fair,intermediate,mean,median,mediocre,medium,middling,modal,moderate
+daily:casual,day-after-day,day-by-day,day-to-day,everyday,informal,periodic,periodical
+symptom:Jacquemier's sign,Kayser-Fleischer ring,Kernig's sign,Koplik's spots,abscess,acetonemia,acetonuria,ague,albuminuria,alkalinuria
+score:Cartesian product,Fibonacci number,account,addend,arity,arrears,atomic number,augend,bad debt,bang
+difference:Fibonacci number,ability,accuracy,addend,adequacy,air,allomerism,amorality,appearance,arability
+between:'tween,betwixt
+active:about,acrobatic,activated,activist,activistic,agile,alive,astir,athletic,brisk
+treatment:G-Jo,High Renaissance,Romantic Movement,Romanticism,TLC,acupressure,acupuncture,administration,authorisation,authorization
+placebo:APC,Antabuse,Atromid-S,Carafate,Cuprimine,Drixoral,Fosamax,HAART,Imuran,Inocor
+statistically:
+significant:considerable,earthshaking,epoch-making,epochal,evidential,evidentiary,fundamental,important,large,meaning
+7:0,1,2,3,4,5,6,8,9,Captain Hicks
+group:Abelian group,Mandelbrot set,accumulation,actinide,actinoid,actinon,acyl,acyl group,aggregation,alcohol group
+no:no more
+clear:Americanise,Americanize,Europeanise,Europeanize,Frenchify,Islamise,Islamize,O.K.,abide,ablate
+tree:afforest,bed,canalise,canalize,channel,checkrow,conn,corner,crab,dibble
+induced:elicited,evoked,iatrogenic
+baseline:ERA,GPA,balkline,baulk-line,benchmark,earned run average,finish line,finishing line,foul line,gauge
+in:440 yards,880 yards,Al,Am,Ba,Be,Bi,Bk,Ca,Cd
+statistically:
+significant:considerable,earthshaking,epoch-making,epochal,evidential,evidentiary,fundamental,important,large,meaning
+placebo:APC,Antabuse,Atromid-S,Carafate,Cuprimine,Drixoral,Fosamax,HAART,Imuran,Inocor
+at:Ac,Ar,As,At,B,Bh,Br,C,Cl,Db
+all:complete,each,every,every last
+time:GMT,Golden Age,Greenwich Mean Time,Greenwich Time,Indian summer,Olympiad,Platonic year,SCLK,Saint Martin's summer,UT
+a:A,AB,ADP,AMP,ATP,B,C,D,E,F
+clear:Americanise,Americanize,Europeanise,Europeanize,Frenchify,Islamise,Islamize,O.K.,abide,ablate
+relationship:account,acquaintance,acquaintanceship,action,activeness,activity,affiliation,affinity,agency,anaclisis
+birch:Acrocarpus fraxinifolius,Adenanthera pavonina,Aegiceras majus,African sandalwood,African walnut,Alstonia scholaris,American dwarf birch,American gray birch,American grey birch,American olive
+specific:ad hoc,circumstantial,limited,particular,particularised,particularized,peculiar,precise,proper(,special
+tree:afforest,bed,canalise,canalize,channel,checkrow,conn,corner,crab,dibble
+well:advantageously,comfortably,considerably,easily,good,intimately,substantially
+majority:N,absolute majority,age of consent,aught,bulk,cipher,countlessness,cypher,drinking age,enough
+adverse:contrary,inauspicious,unfavorable,unfavourable,untoward
+being:action,activeness,activity,actuality,aerobe,agency,aliveness,amphidiploid,anaerobe,animal
+mild:balmy,clement,gentle,humble,meek,mild-mannered,moderate,modest,soft,temperate
+or:Beaver State,ER,OR,Oregon,emergency room,operating room,operating theater,operating theatre,recovery room,surgery
+moderate:Americanise,Americanize,Europeanise,Europeanize,Frenchify,Islamise,Islamize,abnegate,accelerate,accustom
+in:440 yards,880 yards,Al,Am,Ba,Be,Bi,Bk,Ca,Cd
+most:about,almost,near,nearly,nigh,to the highest degree,virtually,well-nigh
+frequently:oft,often,oftentimes,ofttimes
+reported:according,notifiable,reportable
+adverse:contrary,inauspicious,unfavorable,unfavourable,untoward
+generally:broadly,broadly speaking,by and large,in general,in the main,loosely,more often than not,mostly
+related:affiliated,affinal,affine,age-related,agnate,agnatic,akin,allied,attached,blood-related
+sublingual:
+administration:Christendom,Christianity,College of Cardinals,Curia,Sacred College,acculturation,antipyresis,appeasement,authorisation,authorization
+tablet:abacus,art paper,blotter,blotting paper,blueprint paper,bolus,booster,booster dose,booster shot,butcher block
+in:440 yards,880 yards,Al,Am,Ba,Be,Bi,Bk,Ca,Cd
+oral:buccal,spoken,unwritten
+trial:MOT,MOT test,Ministry of Transportation test,Scopes trial,Snellen test,action,action at law,adoption,alpha test,appeal
+suggest:accent,accentuate,account,acquaint,adumbrate,advance,advert,advise,advocate,affirm
+tree:afforest,bed,canalise,canalize,channel,checkrow,conn,corner,crab,dibble
+in:440 yards,880 yards,Al,Am,Ba,Be,Bi,Bk,Ca,Cd
+up:ahead,ascending,astir,awake,aweigh,dormie,dormy,finished,functioning,heavenward
+12:10,100,1000,10000,100000,1000000,1000000000,1000000000000,11,120
+a:A,AB,ADP,AMP,ATP,B,C,D,E,F
+profile:autobiography,bar chart,bar graph,color chart,conspicuousness,eye chart,flip chart,hagiography,low profile,organization chart
+suitable:desirable,eligible,fit,suited,worthy
+indicate:account,acquaint,advise,air,announce,annunciate,apprise,apprize,argue,augur
+a:A,AB,ADP,AMP,ATP,B,C,D,E,F
+but:just,merely,only,simply
+clinical:nonsubjective,objective
+efficacy:efficaciousness,incisiveness,trenchancy
+probably:believably,belike,credibly,in all likelihood,in all probability,likely,plausibly
+due:ascribable,attributable,callable,cod,collect,collectable,collectible,delinquent,expected,imputable
+low:abject,alto,baritone,bass,blue,broken,contemptible,contrabass,contralto,crushed
+pollen:aeciospore,ascospore,basidiospore,carpospore,chlamydospore,conidiospore,conidium,endospore,fern seed,macrospore
+emphasizing:accenting,accentuation,accomplishment,achievement,aggression,alienation,application,arrival,beatification,benignity
+importance:GDP,GNP,accent,account,big deal,book value,cost,dishonor,dishonour,emphasis
+pollen:aeciospore,ascospore,basidiospore,carpospore,chlamydospore,conidiospore,conidium,endospore,fern seed,macrospore
+exposure:Station of the Cross,adumbration,apostasy,arial mosaic,assailability,audiogram,background,beefcake,black and white,blowup
+outcome:Coriolis effect,Z,aftereffect,aftermath,backwash,bandwagon effect,branch,brisance,butterfly effect,by-product
+a:A,AB,ADP,AMP,ATP,B,C,D,E,F
+pollen:aeciospore,ascospore,basidiospore,carpospore,chlamydospore,conidiospore,conidium,endospore,fern seed,macrospore
+allergy:allergic reaction,allergic rhinitis,anaphylaxis,atopic allergy,atopy,delayed allergy,food allergy,hives,immediate allergy,nettle rash
+immunotherapy:EMDA,HRT,actinotherapy,aromatherapy,botanical medicine,chemotherapy,correction,electric healing,electrical healing,electromotive drug administration
