@@ -13,7 +13,7 @@ import java.net.URLEncoder;
 
 public class AnnotateText {
 
-    static final String REST_URL = "http://data.bioontology.org";
+    static final String REST_URL = "https://data.bioontology.org";
     static final String API_KEY = "";
     static final ObjectMapper mapper = new ObjectMapper();
 
