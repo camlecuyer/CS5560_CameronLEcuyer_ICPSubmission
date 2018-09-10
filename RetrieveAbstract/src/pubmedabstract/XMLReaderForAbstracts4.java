@@ -24,6 +24,7 @@ public class XMLReaderForAbstracts4 {
 			for(int i=1;i<100;i++)
 			{
 			 File file = new File("new_data_allergy/abstracts/" + i +".xml");
+
 			 if(file.exists())
 			  {
 				  DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -31,7 +32,6 @@ public class XMLReaderForAbstracts4 {
 				  Document doc = db.parse(file);
 				  doc.getDocumentElement().normalize();
 				  System.out.println("Root element " + doc.getDocumentElement().getNodeName());
-				  //NodeList nodeLst = doc.getElementsByTagName("PubmedArticle");
 				  NodeList abstractBlock = doc.getElementsByTagName("AbstractText");
 
 				  File f = new File("new_data_allergy/abstract_text/"+i+".txt");
@@ -44,10 +44,7 @@ public class XMLReaderForAbstracts4 {
 					{
 						Element e = (Element) abst;
 
-						//System.out.println(e.getTextContent());
 						fw.append(e.getTextContent());
-
-
 					}
 				  }
 
