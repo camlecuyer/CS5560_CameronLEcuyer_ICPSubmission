@@ -1,10 +1,6 @@
-
-
 import org.apache.spark.{SparkContext, SparkConf}
+import rita.RiWordNet
 
-/**
- * Created by Mayanka on 09-Sep-15.
- */
 object SparkWordCount {
 
   def main(args: Array[String]) {
@@ -13,11 +9,20 @@ object SparkWordCount {
 
     val sparkConf = new SparkConf().setAppName("SparkWordCount").setMaster("local[*]")
 
-    val sc=new SparkContext(sparkConf)
+    val sc = new SparkContext(sparkConf)
 
     val inputf = sc.wholeTextFiles("abstract_text", 4)
 
-    val wc = inputf.flatMap(line=>{line._2.split(" ")}).map(word=>(word,1))
+    val flatInput = inputf.flatMap(line=>{line._2.split(" ")})
+
+    val wc = flatInput.map(word=>(word,1))
+
+    //val wordnet = new RiWordNet("C:\\WordNet\\WordNet-3.0")
+    val wordnetCount = flatInput.map(word => if(new RiWordNet("C:\\WordNet\\WordNet-3.0").exists(word)) (word,1) else (word, 0))
+
+    val wNetCount = wordnetCount.reduceByKey(_+_)
+
+    wNetCount.saveAsTextFile("outCount")
 
     // example on how to refer within wholeTextFiles
     /*inputf.map(abs => {
@@ -29,11 +34,11 @@ object SparkWordCount {
 
     //val wc=input.flatMap(line=>{line.split(" ")}).map(word=>(word,1)).cache()
 
-    val output=wc.reduceByKey(_+_)
+    val output = wc.reduceByKey(_+_)
 
     output.saveAsTextFile("output")
 
-    val o=output.collect()
+    val o = output.collect()
 
     var s:String="Words:Count \n"
     o.foreach{case(word,count)=>{
@@ -41,7 +46,5 @@ object SparkWordCount {
       s+=word+" : "+count+"\n"
 
     }}
-
   }
-
 }
