@@ -1,5 +1,16 @@
-import org.apache.spark.{SparkContext, SparkConf}
+import java.util.Properties
+
+import edu.stanford.nlp.ling.CoreAnnotations.{LemmaAnnotation, PartOfSpeechAnnotation, SentencesAnnotation, TokensAnnotation}
+import org.apache.spark.{SparkConf, SparkContext}
+import edu.stanford.nlp.pipeline.Annotation
+import edu.stanford.nlp.pipeline.StanfordCoreNLP
+import edu.stanford.nlp.util.CoreMap
+import edu.stanford.nlp.ling.{CoreAnnotations, CoreLabel}
+
+import scala.collection.JavaConversions._
 import rita.RiWordNet
+
+import scala.collection.mutable.{ArrayBuffer, ListBuffer}
 
 object SparkWordCount {
 
@@ -13,16 +24,16 @@ object SparkWordCount {
 
     val inputf = sc.wholeTextFiles("abstract_text", 4)
 
-    val flatInput = inputf.flatMap(line=>{line._2.split(" ")})
+    val flatInput = inputf.flatMap(doc=>{doc._2.split(" ")})
 
-    val wc = flatInput.map(word=>(word,1))
+    //val wc = flatInput.map(word=>(word,1))
 
     //val wordnet = new RiWordNet("C:\\WordNet\\WordNet-3.0")
-    val wordnetCount = flatInput.map(word => if(new RiWordNet("C:\\WordNet\\WordNet-3.0").exists(word)) (word,1) else (word, 0))
+    //val wordnetCount = flatInput.map(word => if(new RiWordNet("C:\\WordNet\\WordNet-3.0").exists(word)) (word,1) else (word, 0))
 
-    val wNetCount = wordnetCount.reduceByKey(_+_)
+    //val wNetCount = wordnetCount.reduceByKey(_+_)
 
-    wNetCount.saveAsTextFile("outCount")
+    //wNetCount.saveAsTextFile("outCount")
 
     // example on how to refer within wholeTextFiles
     /*inputf.map(abs => {
@@ -34,17 +45,45 @@ object SparkWordCount {
 
     //val wc=input.flatMap(line=>{line.split(" ")}).map(word=>(word,1)).cache()
 
-    val output = wc.reduceByKey(_+_)
+    //val output = wc.reduceByKey(_+_)
 
-    output.saveAsTextFile("output")
+    //output.saveAsTextFile("output")
 
-    val o = output.collect()
+    //val o = output.collect()
 
-    var s:String="Words:Count \n"
-    o.foreach{case(word,count)=>{
+    //var s:String="Words:Count \n"
+    //o.foreach{case(word,count)=>{
 
-      s+=word+" : "+count+"\n"
+      //s+=word+" : "+count+"\n"
 
-    }}
+    //}}
+
+    val lemmatized = inputf.map(line => lemmatize(line._2))
+    lemmatized.foreach(println)
+  }
+
+  // code referenced from https://stackoverflow.com/questions/30222559/simplest-method-for-text-lemmatization-in-scala-and-spark
+  def lemmatize(text: String): ListBuffer[(String, String)] = {
+    val props = new Properties()
+    props.setProperty("annotators", "tokenize, ssplit, pos, lemma")
+    val pipeline = new StanfordCoreNLP(props)
+    val document = new Annotation(text)
+    pipeline.annotate(document)
+
+    //val lemmas = new ArrayBuffer[String]()
+    val lemmas = ListBuffer.empty[(String, String)]
+    val sentences = document.get(classOf[SentencesAnnotation])
+
+    for (sentence <- sentences; token <- sentence.get(classOf[TokensAnnotation])) {
+      val lemma = token.get(classOf[LemmaAnnotation])
+      val pos = token.get(classOf[PartOfSpeechAnnotation])
+
+      if (lemma.length > 2) {
+        //lemmas += lemma.toLowerCase
+        //lemmas += pos
+        lemmas += ((lemma.toLowerCase, pos.toLowerCase))
+      }
+    }
+    lemmas
   }
 }
