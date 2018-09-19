@@ -7,8 +7,8 @@ import edu.stanford.nlp.pipeline.StanfordCoreNLP
 
 import scala.collection.JavaConversions._
 import rita.RiWordNet
-
-import scala.collection.mutable.{ArrayBuffer, ListBuffer}
+import scala.io.Source
+import scala.collection.mutable.{ListBuffer}
 
 object SparkWordCount {
 
@@ -23,7 +23,6 @@ object SparkWordCount {
     val inputf = sc.wholeTextFiles("abstract_text", 4)
 
     val lemmatized = inputf.map(line => lemmatize(line._2))
-    //lemmatized.foreach(println)
 
     val flatLemma = lemmatized.flatMap(list => list)
 
@@ -34,7 +33,6 @@ object SparkWordCount {
     val wordnetCount = flatLemma.map(word => if(new RiWordNet("C:\\WordNet\\WordNet-3.0").exists(word._1)) (word._1,1) else (word._1, 0))
     val posCount = flatLemma.map(word => (word._2,1))
 
-    //wordnetCount.foreach(println)
     val wNetCount = wordnetCount.reduceByKey(_+_)
 
     wNetCount.saveAsTextFile("outCount")
@@ -43,12 +41,6 @@ object SparkWordCount {
 
     oPosCount.saveAsTextFile("outPos")
 
-    // example on how to refer within wholeTextFiles
-    /*inputf.map(abs => {
-      abs._1
-      abs._2
-    })*/
-
     //val input = sc.textFile("input", 4)
 
     //val wc=input.flatMap(line=>{line.split(" ")}).map(word=>(word,1)).cache()
@@ -56,14 +48,41 @@ object SparkWordCount {
     val output = wc.reduceByKey(_+_)
     output.saveAsTextFile("output")
 
-    //val o = output.collect()
+    if (args.length < 2) {
+      System.out.println("\n$ java RESTClientGet [Bioconcept] [Inputfile] [Format]")
+      System.out.println("\nBioconcept: We support five kinds of bioconcepts, i.e., Gene, Disease, Chemical, Species, Mutation. When 'BioConcept' is used, all five are included.\n\tInputfile: a file with a pmid list\n\tFormat: PubTator (tab-delimited text file), BioC (xml), and JSON\n\n")
+    }
+    else
+    {
+      val Bioconcept = args(0)
+      val Inputfile = args(1)
+      var Format = "PubTator"
+      if (args.length > 2) Format = args(2)
 
-    //var s:String="Words:Count \n"
-    //o.foreach{case(word,count)=>{
+      val medWords = ListBuffer.empty[(String, String)]
 
-      //s+=word+" : "+count+"\n"
+      for (line <- Source.fromFile(Inputfile).getLines) {
+        val data = get("https://www.ncbi.nlm.nih.gov/CBBresearch/Lu/Demo/RESTful/tmTool.cgi/" + Bioconcept + "/" + line + "/" + Format + "/")
+        val lines = data.flatMap(line => {line.split("\n")}).drop(2)
 
-   // }}
+        val words = lines.flatMap(word => {word.split("\t").drop(3).dropRight(1)}).toArray
+
+        for(i <- 0 until words.length by 2)
+        {
+          if(i < words.length - 1)
+          {
+            val work = (words(i), words(i+1))
+            medWords += work
+          }
+
+        }
+      }
+
+      val medData = sc.parallelize(medWords.toList)
+      val flatMed = medData.map(word => (word._1, 1))
+      val outMed = flatMed.reduceByKey(_+_)
+      outMed.saveAsTextFile("outMed")
+    }
   }
 
   // code referenced from https://stackoverflow.com/questions/30222559/simplest-method-for-text-lemmatization-in-scala-and-spark
@@ -90,4 +109,6 @@ object SparkWordCount {
     }
     lemmas
   }
+
+  def get(url: String) = scala.io.Source.fromURL(url).getLines()
 }
