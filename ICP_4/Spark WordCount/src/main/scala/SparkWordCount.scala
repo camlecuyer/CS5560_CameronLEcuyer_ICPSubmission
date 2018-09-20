@@ -101,7 +101,7 @@ object SparkWordCount {
       val lemma = token.get(classOf[LemmaAnnotation])
       val pos = token.get(classOf[PartOfSpeechAnnotation])
 
-      if (lemma.length > 2) {
+      if (lemma.length > 1) {
         //lemmas += lemma.toLowerCase
         //lemmas += pos
         lemmas += ((lemma.toLowerCase, pos.toLowerCase))
