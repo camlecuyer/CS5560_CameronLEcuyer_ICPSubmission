@@ -8,22 +8,20 @@ import edu.stanford.nlp.pipeline.StanfordCoreNLP
 import scala.collection.JavaConversions._
 import rita.RiWordNet
 import scala.io.Source
-import scala.collection.mutable.{ListBuffer}
+import scala.collection.mutable.ListBuffer
 
 object SparkWordCount {
 
   def main(args: Array[String]) {
 
-    System.setProperty("hadoop.home.dir","C:\\winutils");
+    System.setProperty("hadoop.home.dir","C:\\winutils")
 
     val sparkConf = new SparkConf().setAppName("SparkWordCount").setMaster("local[*]")
-
     val sc = new SparkContext(sparkConf)
 
     val inputf = sc.wholeTextFiles("abstract_text", 4)
 
     val lemmatized = inputf.map(line => lemmatize(line._2))
-
     val flatLemma = lemmatized.flatMap(list => list)
 
     //val flatInput = inputf.flatMap(doc=>{doc._2.split(" ")})
@@ -34,11 +32,9 @@ object SparkWordCount {
     val posCount = flatLemma.map(word => (word._2,1))
 
     val wNetCount = wordnetCount.reduceByKey(_+_)
-
     wNetCount.saveAsTextFile("outCount")
 
     val oPosCount = posCount.reduceByKey(_+_)
-
     oPosCount.saveAsTextFile("outPos")
 
     //val input = sc.textFile("input", 4)
@@ -74,7 +70,6 @@ object SparkWordCount {
             val work = (words(i), words(i+1))
             medWords += work
           }
-
         }
       }
 
@@ -93,7 +88,6 @@ object SparkWordCount {
     val document = new Annotation(text)
     pipeline.annotate(document)
 
-    //val lemmas = new ArrayBuffer[String]()
     val lemmas = ListBuffer.empty[(String, String)]
     val sentences = document.get(classOf[SentencesAnnotation])
 
@@ -102,8 +96,6 @@ object SparkWordCount {
       val pos = token.get(classOf[PartOfSpeechAnnotation])
 
       if (lemma.length > 1) {
-        //lemmas += lemma.toLowerCase
-        //lemmas += pos
         lemmas += ((lemma.toLowerCase, pos.toLowerCase))
       }
     }
