@@ -27,7 +27,7 @@ object TF_IDF {
       val splitString = lemmatised.split(" ")
       splitString.toSeq
     })
-
+docum
     val documentSeq = documents.map(f => {
       val splitString = f._2.split(" ")
       splitString.toSeq
