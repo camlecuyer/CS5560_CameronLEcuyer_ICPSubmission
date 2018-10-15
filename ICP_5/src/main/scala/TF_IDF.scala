@@ -1,9 +1,6 @@
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.mllib.feature.{HashingTF, IDF, Word2Vec}
-import edu.stanford.nlp.util.StringUtils
-import collection.JavaConverters
 import scala.collection.immutable.HashMap
-import org.apache.spark.api.java.JavaRDD
 
 /**
   * Created by Mayanka on 19-06-2017.
@@ -27,7 +24,7 @@ object TF_IDF {
       val splitString = lemmatised.split(" ")
       splitString.toSeq
     })
-docum
+
     val documentSeq = documents.map(f => {
       val splitString = f._2.split(" ")
       splitString.toSeq

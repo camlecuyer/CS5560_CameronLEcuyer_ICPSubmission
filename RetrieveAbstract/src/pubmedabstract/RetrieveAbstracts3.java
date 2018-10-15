@@ -24,7 +24,7 @@ public class RetrieveAbstracts3 {
 	    {
 	        try
 	        {
-	        	File file=new File("new_data_allergy/Just_Ids");
+	        	File file=new File("new_data_alz/Just_Ids");
 	        	BufferedReader bufferedReader=new BufferedReader(new FileReader(file));
 	        	String dd;
 	        	String IDs = null;
@@ -53,7 +53,7 @@ public class RetrieveAbstracts3 {
 		 
 		            BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
 		           String d;
-		           File f = new File("new_data_allergy/abstracts/"+j+".xml");
+		           File f = new File("new_data_alz/abstracts/"+j+".xml");
 		            FileWriter fw= new FileWriter(f.getAbsoluteFile());
 		            BufferedWriter bw=new BufferedWriter(fw); 
 		           while((d=br.readLine())!=null)

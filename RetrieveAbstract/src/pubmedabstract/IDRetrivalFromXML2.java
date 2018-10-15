@@ -23,7 +23,7 @@ public class IDRetrivalFromXML2 {
 //			for(int i=2014;i<2015;i++)
 //			{
 
-			 File file = new File("new_data_allergy/ids.xml");
+			 File file = new File("new_data_alz/ids.xml");
 		         if(file.exists())
 			  {
 			  DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -33,7 +33,7 @@ public class IDRetrivalFromXML2 {
 			  System.out.println("Root element " + doc.getDocumentElement().getNodeName());
 			  NodeList nodeLst = doc.getElementsByTagName("IdList");
 			  System.out.println("Information of all employees");
-			  PrintStream outPrintStream=new PrintStream(new File("new_data_allergy/Just_Ids"));
+			  PrintStream outPrintStream=new PrintStream(new File("new_data_alz/Just_Ids"));
 		      
 			  for (int s = 0; s < nodeLst.getLength(); s++) {
 

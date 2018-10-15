@@ -23,7 +23,7 @@ public class XMLReaderForAbstracts4 {
 		try {
 			for(int i=1;i<100;i++)
 			{
-			 File file = new File("new_data_allergy/abstracts/" + i +".xml");
+			 File file = new File("new_data_alz/abstracts/" + i +".xml");
 
 			 if(file.exists())
 			  {
@@ -34,7 +34,7 @@ public class XMLReaderForAbstracts4 {
 				  System.out.println("Root element " + doc.getDocumentElement().getNodeName());
 				  NodeList abstractBlock = doc.getElementsByTagName("AbstractText");
 
-				  File f = new File("new_data_allergy/abstract_text/"+i+".txt");
+				  File f = new File("new_data_alz/abstract_text/"+i+".txt");
 				  FileWriter fw= new FileWriter(f.getAbsoluteFile());
 
 				  for(int temp = 0; temp < abstractBlock.getLength(); temp++)
