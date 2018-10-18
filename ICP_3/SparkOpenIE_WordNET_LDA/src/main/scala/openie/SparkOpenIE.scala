@@ -79,18 +79,30 @@ object SparkOpenIE {
 
       val medData = sc.parallelize(medWords.toList).map(line => (line._1.toLowerCase, line._2)).distinct()
       val medWordList = medData.map(line => line._1).toLocalIterator.toSet
+      val medWordListSingle = medData.map(line => if(line._1.contains(" ")) { line._1.split(" ")} else {line._1}).toLocalIterator.toSet
 
-      val medSubjects = subjects.map(line => if (medWordList.contains(line)) {
-        toCamelCase(line)
-      } else {
-        ""
+      val medSubjects = subjects.map(line => if(line.contains(" "))
+      {
+        if (medWordList.contains(line) || line.split(" ").exists(medWordListSingle contains _)) {
+          toCamelCase(line)
+        } else {
+          ""
+        }
+      }
+      else
+      {
+        if (medWordList.contains(line)) {
+          toCamelCase(line)
+        } else {
+          ""
+        }
       }).distinct()
 
       //triplets.map(line => toCamelCase(line._1) + "," + toCamelCase(line._2) + "," + toCamelCase(line._3)).saveAsTextFile(OUT_PATH + "triplets")
       //predicates.saveAsTextFile(OUT_PATH + "predicates")
       //subjects.map(line => toCamelCase(line)).saveAsTextFile(OUT_PATH + "subjects")
       medSubjects.saveAsTextFile(OUT_PATH + "medSubjects")
-      medData.map(line => line._1).distinct().saveAsTextFile(OUT_PATH + "medWords")
+      //medData.map(line => line._1).distinct().saveAsTextFile(OUT_PATH + "medWords")
     }
   }
 
