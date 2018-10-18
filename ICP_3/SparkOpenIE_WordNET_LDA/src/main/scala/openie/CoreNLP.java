@@ -16,12 +16,11 @@ public class CoreNLP {
         String lemma="";
         for (Sentence sent : doc.sentences()) {  // Will iterate over two sentences
 
-
             Collection<Quadruple<String, String, String, Double>> l=sent.openie();
             for (int i = 0; i < l.toArray().length ; i++) {
                 lemma+= l.toString();
             }
-            System.out.println(lemma);
+            //System.out.println(lemma);
         }
 
         return lemma;
