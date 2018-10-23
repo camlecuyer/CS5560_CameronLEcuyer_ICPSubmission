@@ -39,9 +39,9 @@ object SparkOpenIE {
 
     val triplets = input.flatMap(line => line)
 
-    val predicates = triplets.map(line => toCamelCase(line._2)).distinct()
-    val subjects = triplets.map(line => toCamelCase(line._1)).distinct()
-    val objects = triplets.map(line => toCamelCase(line._3)).distinct()
+    val predicates = triplets.map(line => toCamelCase(line._2)).distinct().filter(line => line != "")
+    val subjects = triplets.map(line => toCamelCase(line._1)).distinct().filter(line => line != "")
+    val objects = triplets.map(line => toCamelCase(line._3)).distinct().filter(line => line != "")
 
     //input.saveAsTextFile(OUT_PATH + "triplets")
     //println(CoreNLP.returnTriplets("The dog has a lifespan of upto 10-12 years."))
@@ -78,13 +78,13 @@ object SparkOpenIE {
         } // end loop
       } // end loop
 
-      val medData = sc.parallelize(medWords.toList).map(line => if (line._1.compareTo(line._2) != 0)
+      val medData = sc.parallelize(medWords.toList).map(line => if (line._1.toLowerCase.compareTo(line._2.toLowerCase) != 0)
         {
-          (toCamelCase(line._1.replaceAll("[']", "")), line._2.toLowerCase.capitalize)
+          (toCamelCase(line._1.replaceAll("[']", "").toLowerCase), line._2.toLowerCase.capitalize)
         }
         else
         {
-          (toCamelCase(line._1), "Misc")
+          (toCamelCase(line._1.toLowerCase), "Misc")
         }).distinct().filter(line => line._1.length > 1)
       //val medWordList = medData.map(line => line._1).toLocalIterator.toSet
       //val medWordListSingle = medData.map(line => if(line._1.contains(" ")) { line._1.split(" ")} else {line._1}).toLocalIterator.toSet
@@ -145,11 +145,67 @@ object SparkOpenIE {
           ""
         }
       }).distinct()*/
-      val workSubjects = subjects.toLocalIterator.toSet
-      val workObjects = objects.toLocalIterator.toSet
-      val workTriples = triplets.map(line => (toCamelCase(line._1), toCamelCase(line._2), toCamelCase(line._3))).toLocalIterator.toSet
+      val workMed = medData.filter(line => line._1.length > 2).toLocalIterator.toSet
+      //val workSubjects = subjects.toLocalIterator.toSet
+      //val workObjects = objects.toLocalIterator.toSet
+      val workTriples = triplets.map(line => (toCamelCase(line._1), toCamelCase(line._2), toCamelCase(line._3)))
 
-      val medSubjects = medData.filter(line => line._1.length > 2).map(line => {
+      val medSubjects = subjects.map(line => {
+        var found : Boolean = false
+        var subject = ""
+        workMed.foreach(ele => if(line.toLowerCase.contains(ele._1.toLowerCase) && !found)
+        {
+          found = true
+          subject = ele._2
+        })
+
+        if(found)
+        {
+          subject + "," + line
+        }
+        else
+        {
+          ""
+        }
+      }).distinct().filter(line => line != "")
+
+      val medObjects = objects.map(line => {
+        var found : Boolean = false
+        var obj = ""
+        workMed.foreach(ele => if(line.toLowerCase.contains(ele._1.toLowerCase) && !found)
+        {
+          found = true
+          obj = ele._2
+        })
+
+        if(found)
+        {
+          obj + "," + line
+        }
+        else
+        {
+          ""
+        }
+      }).distinct().filter(line => line != "")
+
+      val medTriplets = workTriples.map(line => {
+        var found : Boolean = false
+        workMed.foreach(ele => if((line._1.toLowerCase.contains(ele._1.toLowerCase) || line._3.toLowerCase.contains(ele._1.toLowerCase)) && !found)
+        {
+          found = true
+        })
+
+        if(found)
+        {
+          line._1 + "," + line._2 + "," + line._3 + "," + "Obj" //+ ";" + line._1
+        }
+        else
+        {
+          ""
+        }
+      }).distinct().filter(line => line != "")
+
+      /*val medSubjects = medData.filter(line => line._1.length > 2).map(line => {
         var found : Boolean = false
         var subject = ""
         workSubjects.foreach(ele => if(ele.toLowerCase.contains(line._1.toLowerCase))
@@ -204,7 +260,7 @@ object SparkOpenIE {
         {
           ""
         }
-      }).distinct().filter(line => line != "")
+      }).distinct().filter(line => line != "")*/
 
       val medSubjectsWork = medSubjects.toLocalIterator.toList
       val medObjectsWork = medObjects.toLocalIterator.toList
@@ -236,15 +292,15 @@ object SparkOpenIE {
         line
       }).distinct().filter(line => line._1.compareTo("") != 0)
 
-      //triplets.map(line => line._5 + ";" + line._4 + ";" + toCamelCase(line._1) + "," + toCamelCase(line._2) + "," + toCamelCase(line._3) + ";"+ line._6).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "triplets")
-      //predicates.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "predicates")
-      //subjects.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "subjects")
-      //objects.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "objects")
-      //medSubjects.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medSubjects")
-      //medObjects.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medObjects")
+      triplets.map(line => line._5 + ";" + line._4 + ";" + toCamelCase(line._1) + "," + toCamelCase(line._2) + "," + toCamelCase(line._3) + ";"+ line._6).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "triplets")
+      predicates.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "predicates")
+      subjects.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "subjects")
+      objects.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "objects")
+      medSubjects.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medSubjects")
+      medObjects.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medObjects")
       medFixed.map(line => line._6).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medTriplets")
-      //medFixed.map(line => line._1 + "," + line._2 + "," + line._4 + ",Func").distinct().coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "tripBoth")
-      /*medFixed.map(line => if(line._2.compareTo("Subject") == 0) {
+      medFixed.map(line => line._1 + "," + line._2 + "," + line._4 + ",Func").distinct().coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "tripBoth")
+      medFixed.map(line => if(line._2.compareTo("Subject") == 0) {
         line._2 + "," + line._3
       }
       else if (line._4.compareTo("Object") == 0){
@@ -252,8 +308,8 @@ object SparkOpenIE {
       }
       else {
         ""
-      }).distinct().filter(line => line.compareTo("") != 0).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "otherIndivid")*/
-      //medData.map(line => line._2 + ","+ line._1).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medWords")
+      }).distinct().filter(line => line.compareTo("") != 0).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "otherIndivid")
+      medData.map(line => line._2 + ","+ line._1).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medWords")
     }
   }
 
@@ -279,7 +335,7 @@ object SparkOpenIE {
   }
 
   def returnTriplets(sentence: String, docName: String): List[(String, String, String, String, String, Int)] = {
-    val doc: Document = new Document(sentence.replaceAll("[',()]", ""))
+    val doc: Document = new Document(sentence.replaceAll("\\(.*?\\)","").replaceAll("[',%/]", "").replaceAll("\\s[0-9]+\\s", " "))
     val lemma = ListBuffer.empty[(String, String, String, String, String, Int)]
 
     for (sent: simple.Sentence <- doc.sentences().asScala.toList) { // Will iterate over two sentences
@@ -291,7 +347,7 @@ object SparkOpenIE {
       var predicate = ""
       var obj = ""
       var count = 0
-      //println(sent)
+
       while(data.hasNext)
         {
           val temp = data.next()
@@ -304,8 +360,6 @@ object SparkOpenIE {
               obj = temp.third
             }
         }
-
-      //println(subject + ", " + predicate + ", " + obj)
 
       lemma += ((subject.toLowerCase, predicate.toLowerCase, obj.toLowerCase, sent.toString, docName, count))
     }
