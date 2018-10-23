@@ -78,13 +78,13 @@ object SparkOpenIE {
         } // end loop
       } // end loop
 
-      val medData = sc.parallelize(medWords.toList).map(line => if (line._1.compareTo(line._2) != 0)
+      val medData = sc.parallelize(medWords.toList).map(line => if (line._1.toLowerCase.compareTo(line._2.toLowerCase) != 0)
         {
-          (toCamelCase(line._1.replaceAll("[']", "")), line._2.toLowerCase.capitalize)
+          (toCamelCase(line._1.replaceAll("[']", "").toLowerCase), line._2.toLowerCase.capitalize)
         }
         else
         {
-          (toCamelCase(line._1), "Misc")
+          (toCamelCase(line._1.toLowerCase), "Misc")
         }).distinct().filter(line => line._1.length > 1)
       //val medWordList = medData.map(line => line._1).toLocalIterator.toSet
       //val medWordListSingle = medData.map(line => if(line._1.contains(" ")) { line._1.split(" ")} else {line._1}).toLocalIterator.toSet
@@ -145,11 +145,67 @@ object SparkOpenIE {
           ""
         }
       }).distinct()*/
-      val workSubjects = subjects.toLocalIterator.toSet
-      val workObjects = objects.toLocalIterator.toSet
-      val workTriples = triplets.map(line => (toCamelCase(line._1), toCamelCase(line._2), toCamelCase(line._3))).toLocalIterator.toSet
+      val workMed = medData.filter(line => line._1.length > 2).toLocalIterator.toSet
+      //val workSubjects = subjects.toLocalIterator.toSet
+      //val workObjects = objects.toLocalIterator.toSet
+      val workTriples = triplets.map(line => (toCamelCase(line._1), toCamelCase(line._2), toCamelCase(line._3)))
 
-      val medSubjects = medData.filter(line => line._1.length > 2).map(line => {
+      val medSubjects = subjects.map(line => {
+        var found : Boolean = false
+        var subject = ""
+        workMed.foreach(ele => if(line.toLowerCase.contains(ele._1.toLowerCase) && !found)
+        {
+          found = true
+          subject = ele._2
+        })
+
+        if(found)
+        {
+          subject + "," + line
+        }
+        else
+        {
+          ""
+        }
+      }).distinct().filter(line => line != "")
+
+      val medObjects = objects.map(line => {
+        var found : Boolean = false
+        var obj = ""
+        workMed.foreach(ele => if(line.toLowerCase.contains(ele._1.toLowerCase) && !found)
+        {
+          found = true
+          obj = ele._2
+        })
+
+        if(found)
+        {
+          obj + "," + line
+        }
+        else
+        {
+          ""
+        }
+      }).distinct().filter(line => line != "")
+
+      val medTriplets = workTriples.map(line => {
+        var found : Boolean = false
+        workMed.foreach(ele => if((line._1.toLowerCase.contains(ele._1.toLowerCase) || line._3.toLowerCase.contains(ele._1.toLowerCase)) && !found)
+        {
+          found = true
+        })
+
+        if(found)
+        {
+          line._1 + "," + line._2 + "," + line._3 + "," + "Obj" //+ ";" + line._1
+        }
+        else
+        {
+          ""
+        }
+      }).distinct().filter(line => line != "")
+
+      /*val medSubjects = medData.filter(line => line._1.length > 2).map(line => {
         var found : Boolean = false
         var subject = ""
         workSubjects.foreach(ele => if(ele.toLowerCase.contains(line._1.toLowerCase))
@@ -204,7 +260,7 @@ object SparkOpenIE {
         {
           ""
         }
-      }).distinct().filter(line => line != "")
+      }).distinct().filter(line => line != "")*/
 
       val medSubjectsWork = medSubjects.toLocalIterator.toList
       val medObjectsWork = medObjects.toLocalIterator.toList
