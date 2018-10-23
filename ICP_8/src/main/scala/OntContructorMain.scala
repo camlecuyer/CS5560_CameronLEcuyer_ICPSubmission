@@ -56,7 +56,6 @@ object OntContructorMain {
 
 
 
-
     val ONTOLOGYURI="http://www.semanticweb.org/mayanka/ontologies/2017/6/"
 
     val manager = OWLManager.createOWLOntologyManager
@@ -186,8 +185,5 @@ object OntContructorMain {
     manager.saveOntology(ontology, owlxmlFormat, os)
     System.out.println("Ontology Created")
 
-
-
   }
-
 }
