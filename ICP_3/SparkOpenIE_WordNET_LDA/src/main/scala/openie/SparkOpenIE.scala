@@ -279,7 +279,7 @@ object SparkOpenIE {
   }
 
   def returnTriplets(sentence: String, docName: String): List[(String, String, String, String, String, Int)] = {
-    val doc: Document = new Document(sentence.replaceAll("\\(.*?\\)","").replaceAll("[',%]", "").replaceAll("\\s[0-9]+\\s", " "))
+    val doc: Document = new Document(sentence.replaceAll("\\(.*?\\)","").replaceAll("[',%/]", "").replaceAll("\\s[0-9]+\\s", " "))
     val lemma = ListBuffer.empty[(String, String, String, String, String, Int)]
 
     for (sent: simple.Sentence <- doc.sentences().asScala.toList) { // Will iterate over two sentences
@@ -291,7 +291,7 @@ object SparkOpenIE {
       var predicate = ""
       var obj = ""
       var count = 0
-      //println(sent)
+
       while(data.hasNext)
         {
           val temp = data.next()
@@ -304,8 +304,6 @@ object SparkOpenIE {
               obj = temp.third
             }
         }
-
-      //println(subject + ", " + predicate + ", " + obj)
 
       lemma += ((subject.toLowerCase, predicate.toLowerCase, obj.toLowerCase, sent.toString, docName, count))
     }
