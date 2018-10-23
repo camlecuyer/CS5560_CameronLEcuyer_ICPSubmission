@@ -149,7 +149,7 @@ object SparkOpenIE {
       val workObjects = objects.toLocalIterator.toSet
       val workTriples = triplets.map(line => (toCamelCase(line._1), toCamelCase(line._2), toCamelCase(line._3))).toLocalIterator.toSet
 
-      val medSubjects = medData.map(line => {
+      val medSubjects = medData.filter(line => line._1.length > 2).map(line => {
         var found : Boolean = false
         var subject = ""
         workSubjects.foreach(ele => if(ele.toLowerCase.contains(line._1.toLowerCase))
@@ -168,7 +168,7 @@ object SparkOpenIE {
         }
       }).distinct().filter(line => line != "")
 
-      val medObjects = medData.map(line => {
+      val medObjects = medData.filter(line => line._1.length > 2).map(line => {
         var found : Boolean = false
         var obj = ""
         workObjects.foreach(ele => if(ele.toLowerCase.contains(line._1.toLowerCase))
@@ -187,7 +187,7 @@ object SparkOpenIE {
         }
       }).distinct().filter(line => line != "")
 
-      val medTriplets = medData.map(line => {
+      val medTriplets = medData.filter(line => line._1.length > 2).map(line => {
         var found : Boolean = false
         var obj = ""
         workTriples.foreach(ele => if(ele._1.toLowerCase.contains(line._1.toLowerCase) || ele._3.toLowerCase.contains(line._1.toLowerCase))
@@ -198,7 +198,7 @@ object SparkOpenIE {
 
         if(found)
         {
-          obj + "," + "Data"
+          obj + "," + "Obj" //+ ";" + line._1
         }
         else
         {
@@ -206,13 +206,53 @@ object SparkOpenIE {
         }
       }).distinct().filter(line => line != "")
 
-      triplets.map(line => line._5 + ";" + line._4 + ";" + toCamelCase(line._1) + "," + toCamelCase(line._2) + "," + toCamelCase(line._3) + ";"+ line._6).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "triplets")
+      val medSubjectsWork = medSubjects.toLocalIterator.toList
+      val medObjectsWork = medObjects.toLocalIterator.toList
+
+      val tripSub = medTriplets.map(line => {
+        var subj = "Subject"
+        val item = line.split(",").head
+        medSubjectsWork.foreach(ele => if(ele.contains(item)) {
+          subj = ele.split(",").head
+        })
+
+        (subj, line, item)
+      })
+
+      val tripBoth = tripSub.map(line => {
+        var obj = "Object"
+        val item = line._2.split(",").drop(2).head
+        medObjectsWork.foreach(ele => if(ele.contains(item)) {
+          obj = ele.split(",").head
+        })
+
+        (line._2.split(",").drop(1).dropRight(1).head, line._1, line._3, obj, item, line._2)
+      })
+
+      val medFixed = tripBoth.map(line => if(line._2.compareTo("Subject") == 0 && line._4.compareTo("Object") == 0) {
+        ("","","","","","")
+      }
+      else {
+        line
+      }).distinct().filter(line => line._1.compareTo("") != 0)
+
+      //triplets.map(line => line._5 + ";" + line._4 + ";" + toCamelCase(line._1) + "," + toCamelCase(line._2) + "," + toCamelCase(line._3) + ";"+ line._6).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "triplets")
       //predicates.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "predicates")
       //subjects.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "subjects")
       //objects.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "objects")
       //medSubjects.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medSubjects")
       //medObjects.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medObjects")
-      //medTriplets.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medTriplets")
+      medFixed.map(line => line._6).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medTriplets")
+      //medFixed.map(line => line._1 + "," + line._2 + "," + line._4 + ",Func").distinct().coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "tripBoth")
+      /*medFixed.map(line => if(line._2.compareTo("Subject") == 0) {
+        line._2 + "," + line._3
+      }
+      else if (line._4.compareTo("Object") == 0){
+        line._4 + "," + line._5
+      }
+      else {
+        ""
+      }).distinct().filter(line => line.compareTo("") != 0).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "otherIndivid")*/
       //medData.map(line => line._2 + ","+ line._1).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medWords")
     }
   }
