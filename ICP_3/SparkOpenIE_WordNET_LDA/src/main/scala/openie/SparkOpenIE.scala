@@ -5,6 +5,7 @@ import edu.stanford.nlp.simple
 import edu.stanford.nlp.simple.Document
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.{SparkConf, SparkContext}
+
 import scala.io.Source
 import scala.collection.mutable.ListBuffer
 
@@ -27,6 +28,10 @@ object SparkOpenIE {
     Logger.getLogger("org").setLevel(Level.OFF)
     Logger.getLogger("akka").setLevel(Level.OFF)
 
+    // StopWords
+    val stopwords = sc.textFile("data/stopwords.txt").collect()
+    val stopwordBroadCast = sc.broadcast(stopwords)
+
     val input = sc.wholeTextFiles(IN_PATH + "abstract_text", 4).map(line => {
     //val input = sc.textFile("data/abstract_text/1.txt").map(line => {
     //val input = sc.textFile(IN_PATH + "abstract_text/1.txt").map(line => {
@@ -37,7 +42,66 @@ object SparkOpenIE {
       triples
     })
 
-    val triplets = input.flatMap(line => line)
+    val triples = input.flatMap(line => line)
+
+    val triplets = triples.map(line => {
+      var subject = ""
+      var obj = ""
+
+      if(line._1.contains(" "))
+      {
+        val work = line._1.split(" ").filter(!stopwordBroadCast.value.contains(_))
+
+        for(i <- 0 until (work.length - 1))
+        {
+          if(work(i).compareTo("ad") == 0)
+          {
+            work(i) = "alzheimers disease"
+          }
+        }
+
+        subject = work.mkString(" ")
+      }
+      else
+      {
+        if(line._1.compareTo("ad") == 0)
+        {
+          subject = "alzheimers disease"
+        }
+        else
+        {
+          subject = line._1
+        }
+      }
+
+      if(line._3.contains(" "))
+      {
+        val work = line._3.split(" ").filter(!stopwordBroadCast.value.contains(_))
+
+        for(i <- 0 until (work.length - 1))
+        {
+          if(work(i).compareTo("ad") == 0)
+          {
+            work(i) = "alzheimers disease"
+          }
+        }
+
+        obj = work.mkString(" ")
+      }
+      else
+      {
+        if(line._3.compareTo("ad") == 0)
+        {
+          obj = "alzheimers disease"
+        }
+        else
+        {
+          obj = line._3
+        }
+      }
+
+      (subject, line._2, obj, line._4, line._5, line._6)
+    })
 
     val predicates = triplets.map(line => toCamelCase(line._2)).distinct().filter(line => line != "")
     val subjects = triplets.map(line => toCamelCase(line._1)).distinct().filter(line => line != "")
@@ -86,68 +150,8 @@ object SparkOpenIE {
         {
           (toCamelCase(line._1.toLowerCase), "Misc")
         }).distinct().filter(line => line._1.length > 1)
-      //val medWordList = medData.map(line => line._1).toLocalIterator.toSet
-      //val medWordListSingle = medData.map(line => if(line._1.contains(" ")) { line._1.split(" ")} else {line._1}).toLocalIterator.toSet
 
-      /*val medSubjects = triplets.map(line => if(line._1.contains(" ") && line._3.contains(" "))
-      {
-        if (medWordList.contains(line._1) || line._1.split(" ").exists(medWordListSingle contains _)) {
-          toCamelCase(line._1) + "," + toCamelCase(line._2) + "," + toCamelCase(line._3)
-        }
-        else if(medWordList.contains(line._3) || line._3.split(" ").exists(medWordListSingle contains _))
-        {
-          toCamelCase(line._1) + "," + toCamelCase(line._2) + "," + toCamelCase(line._3)
-        }
-        else
-        {
-          ""
-        }
-      }
-      else if (line._1.contains(" "))
-      {
-        if (medWordList.contains(line._1) || line._1.split(" ").exists(medWordListSingle contains _)) {
-          toCamelCase(line._1) + "," + toCamelCase(line._2) + "," + toCamelCase(line._3)
-        }
-        else if(medWordList.contains(line._3))
-        {
-          toCamelCase(line._1) + "," + toCamelCase(line._2) + "," + toCamelCase(line._3)
-        }
-        else
-        {
-          ""
-        }
-      }
-      else if (line._3.contains(" "))
-      {
-        if (medWordList.contains(line._1)) {
-          toCamelCase(line._1) + "," + toCamelCase(line._2) + "," + toCamelCase(line._3)
-        }
-        else if(medWordList.contains(line._3) || line._3.split(" ").exists(medWordListSingle contains _))
-        {
-          toCamelCase(line._1) + "," + toCamelCase(line._2) + "," + toCamelCase(line._3)
-        }
-        else
-        {
-          ""
-        }
-      }
-      else
-      {
-        if (medWordList.contains(line._1)) {
-          toCamelCase(line._1) + "," + toCamelCase(line._2) + "," + toCamelCase(line._3)
-        }
-        else if (medWordList.contains(line._3))
-        {
-          toCamelCase(line._1) + "," + toCamelCase(line._2) + "," + toCamelCase(line._3)
-        }
-        else
-        {
-          ""
-        }
-      }).distinct()*/
       val workMed = medData.filter(line => line._1.length > 2).toLocalIterator.toSet
-      //val workSubjects = subjects.toLocalIterator.toSet
-      //val workObjects = objects.toLocalIterator.toSet
       val workTriples = triplets.map(line => (toCamelCase(line._1), toCamelCase(line._2), toCamelCase(line._3)))
 
       val medSubjects = subjects.map(line => {
@@ -205,63 +209,6 @@ object SparkOpenIE {
         }
       }).distinct().filter(line => line != "")
 
-      /*val medSubjects = medData.filter(line => line._1.length > 2).map(line => {
-        var found : Boolean = false
-        var subject = ""
-        workSubjects.foreach(ele => if(ele.toLowerCase.contains(line._1.toLowerCase))
-        {
-          found = true
-          subject = ele
-        })
-
-        if(found)
-        {
-          line._2 + "," + subject
-        }
-        else
-        {
-            ""
-        }
-      }).distinct().filter(line => line != "")
-
-      val medObjects = medData.filter(line => line._1.length > 2).map(line => {
-        var found : Boolean = false
-        var obj = ""
-        workObjects.foreach(ele => if(ele.toLowerCase.contains(line._1.toLowerCase))
-        {
-          found = true
-          obj = ele
-        })
-
-        if(found)
-        {
-          line._2 + "," + obj
-        }
-        else
-        {
-          ""
-        }
-      }).distinct().filter(line => line != "")
-
-      val medTriplets = medData.filter(line => line._1.length > 2).map(line => {
-        var found : Boolean = false
-        var obj = ""
-        workTriples.foreach(ele => if(ele._1.toLowerCase.contains(line._1.toLowerCase) || ele._3.toLowerCase.contains(line._1.toLowerCase))
-        {
-          found = true
-          obj = ele._1 + "," + ele._2 + "," + ele._3
-        })
-
-        if(found)
-        {
-          obj + "," + "Obj" //+ ";" + line._1
-        }
-        else
-        {
-          ""
-        }
-      }).distinct().filter(line => line != "")*/
-
       val medSubjectsWork = medSubjects.toLocalIterator.toList
       val medObjectsWork = medObjects.toLocalIterator.toList
 
@@ -292,7 +239,19 @@ object SparkOpenIE {
         line
       }).distinct().filter(line => line._1.compareTo("") != 0)
 
-      triplets.map(line => line._5 + ";" + line._4 + ";" + toCamelCase(line._1) + "," + toCamelCase(line._2) + "," + toCamelCase(line._3) + ";"+ line._6).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "triplets")
+      /*System.out.println("MedTriplets: " + medTriplets.count)
+      System.out.println("MedSubjects: " + medSubjects.count)
+      System.out.println("MedObjects: " + medObjects.count)
+      System.out.println("MedWords: " + medData.count)
+      System.out.println("Subjects: " + subjects.count)
+      System.out.println("Objects: " + objects.count)
+      System.out.println("Predicates: " + predicates.count)
+      System.out.println("FinalTriplets: " + medFixed.count)*/
+
+      System.out.println("Triplets: " + triplets.map(line => line._6).sum())
+      //System.out.println("UniqueTriplets: " + triplets.count)
+
+      /*triplets.map(line => line._5 + ";" + line._4 + ";" + toCamelCase(line._1) + "," + toCamelCase(line._2) + "," + toCamelCase(line._3) + ";"+ line._6).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "triplets")
       predicates.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "predicates")
       subjects.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "subjects")
       objects.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "objects")
@@ -309,7 +268,7 @@ object SparkOpenIE {
       else {
         ""
       }).distinct().filter(line => line.compareTo("") != 0).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "otherIndivid")
-      medData.map(line => line._2 + ","+ line._1).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medWords")
+      medData.map(line => line._2 + ","+ line._1).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medWords")*/
     }
   }
 
