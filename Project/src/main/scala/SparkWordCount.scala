@@ -24,10 +24,11 @@ object SparkWordCount {
     val sc = new SparkContext(sparkConf)
 
     // retrieve data
-    val inputf = sc.wholeTextFiles(IN_PATH + "abstract_text", 2)
+    val inputf = sc.wholeTextFiles(IN_PATH + "abstract_text", 4)
+    val stopwords = sc.textFile(IN_PATH+ "stopwords.txt").collect()
 
     // lemmatize the data
-    val lemmatized = inputf.map(line => lemmatize(line._2))
+    val lemmatized = inputf.map(line => lemmatize(line._2, stopwords))
     val flatLemma = lemmatized.flatMap(list => list)
     val lemmatizedSeq = flatLemma.map(list => List(list._1))
     val ngram2LemmaSeq = lemmatized.map(line => {
@@ -97,13 +98,13 @@ object SparkWordCount {
 
           val tf_idf = TF_IDF(medSeq, sc)
 
-          tf_idf.saveAsTextFile(OUT_PATH + "outMedTFIDF")
+          tf_idf.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outMedTFIDF")
 
           val outMed = flatMed.reduceByKey(_+_)
-          outMed.saveAsTextFile(OUT_PATH + "outMed")
+          outMed.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outMed")
 
           val outMedType = medType.reduceByKey(_+_)
-          outMedType.saveAsTextFile(OUT_PATH + "outMedType")
+          outMedType.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outMedType")
 
           medWordTotal = flatMed.count()
         } // end if
@@ -114,34 +115,34 @@ object SparkWordCount {
     medThread.start()
 
     val tf_idf = TF_IDF(lemmatizedSeq, sc)
-    tf_idf.saveAsTextFile(OUT_PATH + "outLemmaTFIDF")
+    tf_idf.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outLemmaTFIDF")
 
     val tf_idf_ngram2 = TF_IDF(ngram2LemmaSeq, sc)
-    tf_idf_ngram2.saveAsTextFile(OUT_PATH + "outNgram2TFIDF")
+    tf_idf_ngram2.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outNgram2TFIDF")
 
     val tf_idf_ngram3 = TF_IDF(ngram3LemmaSeq, sc)
-    tf_idf_ngram3.saveAsTextFile(OUT_PATH + "outNgram3TFIDF")
+    tf_idf_ngram3.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outNgram3TFIDF")
 
     val wNetCount = wordnetCount.reduceByKey(_+_)
-    wNetCount.saveAsTextFile(OUT_PATH + "outWordNetCount")
+    wNetCount.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outWordNetCount")
 
     val oPosCount = posCount.reduceByKey(_+_)
-    oPosCount.saveAsTextFile(OUT_PATH + "outPosCount")
+    oPosCount.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outPosCount")
 
     val output = wc.reduceByKey(_+_)
-    output.saveAsTextFile(OUT_PATH + "outCount")
+    output.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outCount")
 
     val outTotals = List(("WordCount", wcTotal), ("NGram2Count", ngram2Total.collect().head._2), ("NGram3Count", ngram3Total.collect().head._2), ("WordNetCount", wordnetCountTotal), ("MedWordCount", medWordTotal))
-    sc.parallelize(outTotals).saveAsTextFile(OUT_PATH + "totals")
+    sc.parallelize(outTotals).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "totals")
 
-    println(("WordCount", wcTotal))
+    println("WordCount" + wcTotal)
 
-    println(("NGram2Count", ngram2Total.collect().head._2))
-    println(("NGram3Count", ngram3Total.collect().head._2))
+    println("NGram2Count" + ngram2Total.collect().head._2)
+    println("NGram3Count" + ngram3Total.collect().head._2)
 
-    println(("WordNetCount", wordnetCountTotal))
+    println("WordNetCount" + wordnetCountTotal)
 
-    println(("MedWordCount", medWordTotal))
+    println("MedWordCount" + medWordTotal)
   } // end main
 
   // generates the NGrams based on the number input
@@ -155,14 +156,15 @@ object SparkWordCount {
 
   // lemmatizes input string
   // code referenced from https://stackoverflow.com/questions/30222559/simplest-method-for-text-lemmatization-in-scala-and-spark
-  def lemmatize(text: String): ListBuffer[(String, String)] = {
+  def lemmatize(text: String, stopwords : Array[String]): ListBuffer[(String, String)] = {
     val props = new Properties()
     props.setProperty("annotators", "tokenize, ssplit, pos, lemma")
     val pipeline = new StanfordCoreNLP(props)
-    val document = new Annotation(text)
+    val document = new Annotation(text.replaceAll("\\(.*?\\)", "").replaceAll("[',%/]", "").replaceAll("\\s[0-9]+\\s", " "))
     pipeline.annotate(document)
-    val stopwords = List("a", "an", "the", "and", "are", "as", "at", "be", "by", "for", "from", "has", "in", "is",
-      "it", "its", "of", "on", "that", "to", "was", "were", "will", "with", "''", "``")
+    //val stopwords = List("a", "an", "the", "and", "are", "as", "at", "be", "by", "for", "from", "has", "in", "is",
+    //  "it", "its", "of", "on", "that", "to", "was", "were", "will", "with", "''", "``", "-lrb-", "-rrb-", "-lsb-",
+    //  "-rsb-")
 
     val lemmas = ListBuffer.empty[(String, String)]
     val sentences = document.get(classOf[SentencesAnnotation])

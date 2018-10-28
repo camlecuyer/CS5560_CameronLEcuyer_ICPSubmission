@@ -56,7 +56,7 @@ object OntContructorMain {
 
 
 
-    val ONTOLOGYURI="http://www.semanticweb.org/mayanka/ontologies/2017/6/"
+    val ONTOLOGYURI="http://www.semanticweb.org/clecuyer/ontologies/2018/10/"
 
     val manager = OWLManager.createOWLOntologyManager
     //creating ontology manager
