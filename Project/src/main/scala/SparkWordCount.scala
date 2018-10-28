@@ -13,8 +13,8 @@ import scala.collection.mutable.ListBuffer
 
 object SparkWordCount {
 
-  private val OUT_PATH = "C:\\Users\\camle\\Box\\projectOutput\\"
-  private val IN_PATH = "C:\\Users\\camle\\Box\\data\\"
+  private val OUT_PATH = "C:\\Users\\CJ\\Box\\projectOutput\\" //"C:\\Users\\camle\\Box\\projectOutput\\"
+  private val IN_PATH = "C:\\Users\\CJ\\Box\\data\\" //"C:\\Users\\camle\\Box\\data\\"
 
   def main(args: Array[String]) {
 
@@ -52,7 +52,7 @@ object SparkWordCount {
     val posCount = flatLemma.map(word => (word._2, 1))
 
     // count for wordnet words
-    val wordnetCount = flatLemma.map(word => if(new RiWordNet("C:\\WordNet\\WordNet-3.0").exists(word._1)) (word._1 + "," + word._2, 1) else (word._1 + "," + word._2, 0))
+    val wordnetCount = flatLemma.map(word => if(new RiWordNet("C:\\WordNet\\WordNet-3.0").exists(word._1)) (word._1 + "," + word._2, 1) else (word._1 + "," + word._2, 0)).reduceByKey(_+_)
     val wordnetCountTotal = wordnetCount.count()
     var medWordTotal: Long = 0
 
