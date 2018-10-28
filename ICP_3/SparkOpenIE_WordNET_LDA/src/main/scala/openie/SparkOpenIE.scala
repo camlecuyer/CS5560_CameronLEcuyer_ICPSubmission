@@ -248,11 +248,11 @@ object SparkOpenIE {
       System.out.println("Predicates: " + predicates.count)
       System.out.println("FinalTriplets: " + medFixed.count)*/
 
-      System.out.println("Triplets: " + triplets.map(line => line._6).sum())
+      //System.out.println("Triplets: " + triplets.map(line => line._6).sum())
       //System.out.println("UniqueTriplets: " + triplets.count)
 
-      /*triplets.map(line => line._5 + ";" + line._4 + ";" + toCamelCase(line._1) + "," + toCamelCase(line._2) + "," + toCamelCase(line._3) + ";"+ line._6).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "triplets")
-      predicates.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "predicates")
+      triplets.map(line => line._5 + "," + line._4 + "," + toCamelCase(line._1) + ";" + toCamelCase(line._2) + ";" + toCamelCase(line._3) + ","+ line._6).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "triplets")
+      /*predicates.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "predicates")
       subjects.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "subjects")
       objects.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "objects")
       medSubjects.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medSubjects")
