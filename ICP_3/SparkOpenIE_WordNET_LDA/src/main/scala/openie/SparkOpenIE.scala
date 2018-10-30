@@ -1,9 +1,16 @@
 package openie
 
+import java.util.Properties
+
+import edu.stanford.nlp.ling.CoreAnnotations.{LemmaAnnotation, PartOfSpeechAnnotation, SentencesAnnotation, TokensAnnotation}
+import edu.stanford.nlp.pipeline.{Annotation, StanfordCoreNLP}
+
+import scala.collection.JavaConversions._
 import scala.collection.JavaConverters._
 import edu.stanford.nlp.simple
 import edu.stanford.nlp.simple.Document
 import org.apache.log4j.{Level, Logger}
+import org.apache.spark.broadcast.Broadcast
 import org.apache.spark.{SparkConf, SparkContext}
 
 import scala.io.Source
@@ -38,11 +45,20 @@ object SparkOpenIE {
       //Getting OpenIE Form of the word using lda.CoreNLP
 
       //val t = CoreNLP.returnTriplets(line)
-      val triples = returnTriplets(line._2, line._1.substring(line._1.lastIndexOf("/") + 1, line._1.length))
-      triples
+      val lemmas = lemmatize(line._2)
+
+      var temp = ""
+
+      lemmas.foreach(ele => temp += ele._1 + " ")
+
+      val lemmaSent = temp.trim
+
+      val triples = returnTriplets(lemmaSent, line._1.substring(line._1.lastIndexOf("/") + 1, line._1.length))
+      (triples, lemmas)
     })
 
-    val triples = input.flatMap(line => line)
+    val triples = input.flatMap(line => line._1)
+    val lemmas = input.flatMap(line => line._2)
 
     val triplets = triples.map(line => {
       var subject = ""
@@ -239,20 +255,20 @@ object SparkOpenIE {
         line
       }).distinct().filter(line => line._1.compareTo("") != 0)
 
-      /*System.out.println("MedTriplets: " + medTriplets.count)
+      System.out.println("MedTriplets: " + medTriplets.count)
       System.out.println("MedSubjects: " + medSubjects.count)
       System.out.println("MedObjects: " + medObjects.count)
       System.out.println("MedWords: " + medData.count)
       System.out.println("Subjects: " + subjects.count)
       System.out.println("Objects: " + objects.count)
       System.out.println("Predicates: " + predicates.count)
-      System.out.println("FinalTriplets: " + medFixed.count)*/
+      System.out.println("FinalTriplets: " + medFixed.count)
 
-      //System.out.println("Triplets: " + triplets.map(line => line._6).sum())
-      //System.out.println("UniqueTriplets: " + triplets.count)
+      System.out.println("Triplets: " + triplets.map(line => line._6).sum())
+      System.out.println("UniqueTriplets: " + triplets.count)
 
       triplets.map(line => line._5 + "," + line._4 + "," + toCamelCase(line._1) + ";" + toCamelCase(line._2) + ";" + toCamelCase(line._3) + ","+ line._6).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "triplets")
-      /*predicates.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "predicates")
+      predicates.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "predicates")
       subjects.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "subjects")
       objects.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "objects")
       medSubjects.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medSubjects")
@@ -268,7 +284,7 @@ object SparkOpenIE {
       else {
         ""
       }).distinct().filter(line => line.compareTo("") != 0).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "otherIndivid")
-      medData.map(line => line._2 + ","+ line._1).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medWords")*/
+      medData.map(line => line._2 + ","+ line._1).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medWords")
     }
   }
 
@@ -287,7 +303,7 @@ object SparkOpenIE {
           }
         }
 
-        temp = words.mkString("").replaceAll("[.]", "")
+        temp = words.mkString("_").replaceAll("[.]", "")
       }
 
     temp
@@ -327,4 +343,33 @@ object SparkOpenIE {
 
   // gets data for medical words from URL
   def get(url: String): Iterator[String] = scala.io.Source.fromURL(url).getLines()
+
+  // lemmatizes input string
+  // code referenced from https://stackoverflow.com/questions/30222559/simplest-method-for-text-lemmatization-in-scala-and-spark
+  def lemmatize(text: String): List[(String, String)] = {
+    val props = new Properties()
+    props.setProperty("annotators", "tokenize, ssplit, pos, lemma")
+    val pipeline = new StanfordCoreNLP(props)
+    val document = new Annotation(text.replaceAll("\\(.*?\\)", "").replaceAll("[',%/]", "").replaceAll("\\s[0-9]+\\s", " ").replaceAll("\\s[0-9]+[.][0-9]+\\s", " "))
+    pipeline.annotate(document)
+
+    val lemmas = ListBuffer.empty[(String, String)]
+    val sentences = document.get(classOf[SentencesAnnotation])
+
+    // for each token get the lemma and part of speech
+    for (sentence <- sentences) {
+      for (token <- sentence.get(classOf[TokensAnnotation]))
+      {
+        val lemma = token.get(classOf[LemmaAnnotation])
+        val pos = token.get(classOf[PartOfSpeechAnnotation])
+
+        if (lemma.length > 1) {
+          lemmas += ((lemma.toLowerCase, pos.toLowerCase))
+        } // end if
+      }
+
+      lemmas += ((".", ""))
+    } // end loop
+    lemmas.toList
+  } // end lemmatize
 }

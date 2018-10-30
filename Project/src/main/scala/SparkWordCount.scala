@@ -1,12 +1,18 @@
 import java.util.Properties
+
 import edu.stanford.nlp.ling.CoreAnnotations.{LemmaAnnotation, PartOfSpeechAnnotation, SentencesAnnotation, TokensAnnotation}
 import org.apache.spark.{SparkConf, SparkContext}
 import edu.stanford.nlp.pipeline.Annotation
 import edu.stanford.nlp.pipeline.StanfordCoreNLP
+import edu.stanford.nlp.simple
+import edu.stanford.nlp.simple.Document
 import org.apache.spark.mllib.feature.{HashingTF, IDF}
 import org.apache.spark.rdd.RDD
+
+import scala.collection.JavaConverters._
 import scala.collection.JavaConversions._
 import rita.RiWordNet
+
 import scala.collection.immutable.HashMap
 import scala.io.Source
 import scala.collection.mutable.ListBuffer
@@ -21,23 +27,145 @@ object SparkWordCount {
     System.setProperty("hadoop.home.dir","C:\\winutils")
 
     val sparkConf = new SparkConf().setAppName("SparkWordCount").setMaster("local[*]")
+
     val sc = new SparkContext(sparkConf)
 
     // retrieve data
-    val inputf = sc.wholeTextFiles(IN_PATH + "abstract_text", 4)
-    val stopwords = sc.textFile(IN_PATH+ "stopwords.txt").collect()
+    val inputf = sc.wholeTextFiles(IN_PATH + "abstract_text", 4).map(line => (line._1.substring(line._1.lastIndexOf("/") + 1, line._1.length), lemmatize(line._2)))
+    val stopwords = sc.textFile(IN_PATH + "stopwords.txt").collect()
+    val stopwordBroadCast = sc.broadcast(stopwords)
+
+    val lemmaInput = inputf.map(line => {
+      val lemmas = line._2
+
+      var temp = ""
+
+      lemmas.foreach(ele => temp += ele._1 + " ")
+
+      val lemmaSent = temp.trim
+
+      (line._1, lemmaSent)
+    })
+
+    val input = lemmaInput.map(line => {
+      val triples = returnTriplets(line._2, line._1)
+      triples
+    })
+
+    val triples = input.flatMap(line => line)
+
+    /*
+    map(line => {
+      var subject = ""
+      var obj = ""
+
+      if(line._1.contains(" "))
+      {
+        val work = line._1.split(" ").filter(!stopwordBroadCast.value.contains(_))
+
+        for(i <- 0 until (work.length - 1))
+        {
+          if(work(i).compareTo("ad") == 0)
+          {
+            work(i) = "alzheimers disease"
+          }
+        }
+
+        subject = work.mkString(" ")
+      }
+      else
+      {
+        if(line._1.compareTo("ad") == 0)
+        {
+          subject = "alzheimers disease"
+        }
+        else
+        {
+          subject = line._1
+        }
+      }
+
+      if(line._3.contains(" "))
+      {
+        val work = line._3.split(" ").filter(!stopwordBroadCast.value.contains(_))
+
+        for(i <- 0 until (work.length - 1))
+        {
+          if(work(i).compareTo("ad") == 0)
+          {
+            work(i) = "alzheimers disease"
+          }
+        }
+
+        obj = work.mkString(" ")
+      }
+      else
+      {
+        if(line._3.compareTo("ad") == 0)
+        {
+          obj = "alzheimers disease"
+        }
+        else
+        {
+          obj = line._3
+        }
+      }
+
+      (subject, line._2, obj, line._4, line._5, line._6)
+    })
+     */
+
+    val triplets = triples.map(line => {
+      var subject = ""
+      var obj = ""
+
+      if(line._1.contains(" "))
+      {
+        val work = line._1.split(" ").filter(!stopwordBroadCast.value.contains(_))
+
+        subject = work.mkString(" ")
+      }
+      else
+      {
+        subject = line._1
+      }
+
+      if(line._3.contains(" "))
+      {
+        val work = line._3.split(" ").filter(!stopwordBroadCast.value.contains(_))
+
+        obj = work.mkString(" ")
+      }
+      else
+      {
+        obj = line._3
+      }
+
+      (subject, line._2, obj, line._4, line._5, line._6)
+    }).cache()
+
+    val predicates = triplets.map(line => line._2).distinct().filter(line => line != "")
+    val subjects = triplets.map(line => line._1).distinct().filter(line => line != "")
+    val objects = triplets.map(line => line._3).distinct().filter(line => line != "")
 
     // lemmatize the data
-    val lemmatized = inputf.map(line => lemmatize(line._2, stopwords))
-    val flatLemma = lemmatized.flatMap(list => list)
+    val lemmatized = inputf.map(line => line._2).cache()
+    val flatLemma = lemmatized.flatMap(list => list).map(line => if(line._1.compareTo(".") == 0) {
+      ("", "")
+    }
+    else
+    {
+      line
+    })
+
     val lemmatizedSeq = flatLemma.map(list => List(list._1))
     val ngram2LemmaSeq = lemmatized.map(line => {
-      val ngrams = getNGrams(line.map(line => line._1).mkString(" "), 2).map(list => list.mkString(" ")).toList
+      val ngrams = getNGrams(line.map(line => line._1).mkString(" ").replaceAll("[.]", ""), 2).map(list => list.mkString(" ")).toList
       ngrams
     })
 
     val ngram3LemmaSeq = lemmatized.map(line => {
-      val ngrams = getNGrams(line.map(line => line._1).mkString(" "), 3).map(list => list.mkString(" ")).toList
+      val ngrams = getNGrams(line.map(line => line._1).mkString(" ").replaceAll("[.]", ""), 3).map(list => list.mkString(" ")).toList
       ngrams
     })
 
@@ -50,12 +178,11 @@ object SparkWordCount {
     // count for all words and count for all parts of speech
     val wc = flatLemma.map(word =>(word._1 + "," + word._2, 1))
     val wcTotal = wc.count()
-    val posCount = flatLemma.map(word => (word._2, 1))
+    val posCount = flatLemma.map(word => word._2).filter(!stopwordBroadCast.value.contains(_)).map(line => (line, 1))
 
     // count for wordnet words
     val wordnetCount = flatLemma.map(word => if(new RiWordNet("C:\\WordNet\\WordNet-3.0").exists(word._1)) (word._1 + "," + word._2, 1) else (word._1 + "," + word._2, 0)).reduceByKey(_+_)
     val wordnetCountTotal = wordnetCount.count()
-    var medWordTotal: Long = 0
 
     val medThread = new Thread(new Runnable {
       def run(): Unit = {
@@ -90,10 +217,10 @@ object SparkWordCount {
             } // end loop
           } // end loop
 
-          val medData = sc.parallelize(medWords.toList)
-          val flatMed = medData.map(word => (word._1.toLowerCase + ", " + word._2.toLowerCase, 1))
-          val medType = medData.map(word => (word._2.toLowerCase, 1))
-          val wordMed = medData.map(word => word._1.toLowerCase)
+          val medWordData = sc.parallelize(medWords.toList)
+          val flatMed = medWordData.map(word => (word._1.toLowerCase + ", " + word._2.toLowerCase, 1))
+          val medType = medWordData.map(word => (word._2.toLowerCase, 1))
+          val wordMed = medWordData.map(word => word._1.toLowerCase).distinct()
           val medSeq = wordMed.map(word => List(word))
 
           val tf_idf = TF_IDF(medSeq, sc)
@@ -106,10 +233,128 @@ object SparkWordCount {
           val outMedType = medType.reduceByKey(_+_)
           outMedType.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outMedType")
 
-          medWordTotal = flatMed.count()
+          val medData = medWordData.map(line => if (line._1.toLowerCase.compareTo(line._2.toLowerCase) != 0)
+          {
+            (toCamelCase(line._1.replaceAll("[']", "").toLowerCase), line._2.toLowerCase.capitalize)
+          }
+          else
+          {
+            (toCamelCase(line._1.toLowerCase), "Misc")
+          }).distinct().filter(line => line._1.length > 1)
+
+          val workMed = medData.filter(line => line._1.length > 2).toLocalIterator.toSet
+          val workTriples = triplets.map(line => (toCamelCase(line._1), toCamelCase(line._2), toCamelCase(line._3)))
+
+          val medSubjects = subjects.map(line => {
+            var found : Boolean = false
+            var subject = ""
+            workMed.foreach(ele => if(line.toLowerCase.contains(ele._1.toLowerCase) && !found)
+            {
+              found = true
+              subject = ele._2
+            })
+
+            if(found)
+            {
+              subject + "," + line
+            }
+            else
+            {
+              ""
+            }
+          }).distinct().filter(line => line != "")
+
+          val medObjects = objects.map(line => {
+            var found : Boolean = false
+            var obj = ""
+            workMed.foreach(ele => if(line.toLowerCase.contains(ele._1.toLowerCase) && !found)
+            {
+              found = true
+              obj = ele._2
+            })
+
+            if(found)
+            {
+              obj + "," + line
+            }
+            else
+            {
+              ""
+            }
+          }).distinct().filter(line => line != "")
+
+          val medTriplets = workTriples.map(line => {
+            var found : Boolean = false
+            workMed.foreach(ele => if((line._1.toLowerCase.contains(ele._1.toLowerCase) || line._3.toLowerCase.contains(ele._1.toLowerCase)) && !found)
+            {
+              found = true
+            })
+
+            if(found)
+            {
+              line._1 + "," + line._2 + "," + line._3 + "," + "Obj" //+ ";" + line._1
+            }
+            else
+            {
+              ""
+            }
+          }).distinct().filter(line => line != "")
+
+          val medSubjectsWork = medSubjects.toLocalIterator.toList
+          val medObjectsWork = medObjects.toLocalIterator.toList
+
+          val tripSub = medTriplets.map(line => {
+            var subj = "Subject"
+            val item = line.split(",").head
+            medSubjectsWork.foreach(ele => if(ele.contains(item)) {
+              subj = ele.split(",").head
+            })
+
+            (subj, line, item)
+          })
+
+          val tripBoth = tripSub.map(line => {
+            var obj = "Object"
+            val item = line._2.split(",").drop(2).head
+            medObjectsWork.foreach(ele => if(ele.contains(item)) {
+              obj = ele.split(",").head
+            })
+
+            (line._2.split(",").drop(1).dropRight(1).head, line._1, line._3, obj, item, line._2)
+          })
+
+          val medFixed = tripBoth.map(line => if(line._2.compareTo("Subject") == 0 && line._4.compareTo("Object") == 0) {
+            ("","","","","","")
+          }
+          else {
+            line
+          }).distinct().filter(line => line._1.compareTo("") != 0)
+
+          println("MedWordCount" + wordMed.count())
+          System.out.println("MedTriplets: " + medTriplets.count)
+          System.out.println("MedSubjects: " + medSubjects.count)
+          System.out.println("MedObjects: " + medObjects.count)
+          System.out.println("MedWords: " + flatMed.count)
+
+          System.out.println("FinalTriplets: " + medFixed.count)
+
+          medSubjects.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medSubjects")
+          medObjects.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medObjects")
+          medFixed.map(line => line._6).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medTriplets")
+          medFixed.map(line => line._1 + "," + line._2 + "," + line._4 + ",Func").distinct().coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "tripBoth")
+          medFixed.map(line => if(line._2.compareTo("Subject") == 0) {
+            line._2 + "," + line._3
+          }
+          else if (line._4.compareTo("Object") == 0){
+            line._4 + "," + line._5
+          }
+          else {
+            ""
+          }).distinct().filter(line => line.compareTo("") != 0).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "otherIndivid")
+          medData.map(line => line._2 + ","+ line._1).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medWords")
         } // end if
-      }
-    })
+      } // end unit
+    }) // end thread
 
     // start thread for medical data
     medThread.start()
@@ -132,8 +377,8 @@ object SparkWordCount {
     val output = wc.reduceByKey(_+_)
     output.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outCount")
 
-    val outTotals = List(("WordCount", wcTotal), ("NGram2Count", ngram2Total.collect().head._2), ("NGram3Count", ngram3Total.collect().head._2), ("WordNetCount", wordnetCountTotal), ("MedWordCount", medWordTotal))
-    sc.parallelize(outTotals).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "totals")
+   val outTotals = List(("WordCount", wcTotal), ("NGram2Count", ngram2Total.collect().head._2), ("NGram3Count", ngram3Total.collect().head._2), ("WordNetCount", wordnetCountTotal))
+    sc.parallelize(outTotals).map(line => line._1 + "," + line._2).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "totals")
 
     println("WordCount" + wcTotal)
 
@@ -142,7 +387,17 @@ object SparkWordCount {
 
     println("WordNetCount" + wordnetCountTotal)
 
-    println("MedWordCount" + medWordTotal)
+    System.out.println("Subjects: " + subjects.count)
+    System.out.println("Objects: " + objects.count)
+    System.out.println("Predicates: " + predicates.count)
+    System.out.println("Triplets: " + triplets.map(line => line._6).sum())
+    System.out.println("UniqueTriplets: " + triplets.count)
+
+    triplets.map(line => line._5 + "," + line._4 + "," + line._1 + ";" + line._2 + ";" + line._3 + ","+ line._6).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "triplets")
+    triplets.map(line => line._1 + ";" + line._2 + ";" + line._3).coalesce(1, shuffle = true).filter(line => line != ";;").saveAsTextFile(OUT_PATH + "triples")
+    predicates.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "predicates")
+    subjects.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "subjects")
+    objects.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "objects")
   } // end main
 
   // generates the NGrams based on the number input
@@ -156,27 +411,34 @@ object SparkWordCount {
 
   // lemmatizes input string
   // code referenced from https://stackoverflow.com/questions/30222559/simplest-method-for-text-lemmatization-in-scala-and-spark
-  def lemmatize(text: String, stopwords : Array[String]): ListBuffer[(String, String)] = {
+  def lemmatize(text: String): ListBuffer[(String, String)] = {
     val props = new Properties()
     props.setProperty("annotators", "tokenize, ssplit, pos, lemma")
     val pipeline = new StanfordCoreNLP(props)
-    val document = new Annotation(text.replaceAll("\\(.*?\\)", "").replaceAll("[',%/]", "").replaceAll("\\s[0-9]+\\s", " "))
+    val document = new Annotation(text.replaceAll("\\(.*?\\)", "").replaceAll("[/]", " ").replaceAll("[',%]", "").replaceAll("\\s[0-9]+\\s", " ").replaceAll("\\s[0-9]+[.][0-9]+\\s", " "))
     pipeline.annotate(document)
-    //val stopwords = List("a", "an", "the", "and", "are", "as", "at", "be", "by", "for", "from", "has", "in", "is",
-    //  "it", "its", "of", "on", "that", "to", "was", "were", "will", "with", "''", "``", "-lrb-", "-rrb-", "-lsb-",
-    //  "-rsb-")
 
     val lemmas = ListBuffer.empty[(String, String)]
     val sentences = document.get(classOf[SentencesAnnotation])
 
     // for each token get the lemma and part of speech
-    for (sentence <- sentences; token <- sentence.get(classOf[TokensAnnotation])) {
-      val lemma = token.get(classOf[LemmaAnnotation])
-      val pos = token.get(classOf[PartOfSpeechAnnotation])
+    for (sentence <- sentences) {
+      for (token <- sentence.get(classOf[TokensAnnotation]))
+      {
+        var lemma = token.get(classOf[LemmaAnnotation])
+        val pos = token.get(classOf[PartOfSpeechAnnotation])
 
-      if (lemma.length > 2 && !stopwords.contains(lemma)) {
-        lemmas += ((lemma.toLowerCase, pos.toLowerCase))
-      } // end if
+        if(lemma.toLowerCase().compareTo("ad") == 0)
+        {
+          lemma = "alzheimers disease"
+        }
+
+        if (lemma.length > 1) {
+          lemmas += ((lemma.toLowerCase, pos.toLowerCase))
+        } // end if
+      }
+
+      lemmas += ((".", ""))
     } // end loop
     lemmas
   } // end lemmatize
@@ -231,4 +493,57 @@ object SparkWordCount {
 
     dd1
   } // end TF_IDF
+
+  def toCamelCase(phrase: String): String = {
+    var temp = phrase
+
+    if(phrase.contains(" "))
+    {
+      val words = phrase.split(" ")
+
+      for(i <- 1 until words.length)
+      {
+        if(words(i).length > 1)
+        {
+          words(i) = words(i).capitalize
+        }
+      }
+
+      temp = words.mkString("_").replaceAll("[.]", "")
+    }
+
+    temp
+  } // end toCamelCase
+
+  def returnTriplets(sentence: String, docName: String): ListBuffer[(String, String, String, String, String, Int)] = {
+    val doc: Document = new Document(sentence)
+    val lemma = ListBuffer.empty[(String, String, String, String, String, Int)]
+
+    for (sent: simple.Sentence <- doc.sentences().asScala.toList) {
+
+      val l = sent.openie()
+      val data = l.iterator()
+
+      var subject = ""
+      var predicate = ""
+      var obj = ""
+      var count = 0
+
+      while(data.hasNext)
+      {
+        val temp = data.next()
+        count += 1
+
+        if((subject.length <= temp.first.length) && (obj.length < temp.third.length))
+        {
+          subject = temp.first
+          predicate = temp.second
+          obj = temp.third
+        }
+      }
+
+      lemma += ((toCamelCase(subject.toLowerCase), toCamelCase(predicate.toLowerCase), toCamelCase(obj.toLowerCase), sent.toString, docName, count))
+    }
+    lemma
+  } // end returnTriplets
 }
