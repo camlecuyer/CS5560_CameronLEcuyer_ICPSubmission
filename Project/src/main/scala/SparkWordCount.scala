@@ -31,7 +31,7 @@ object SparkWordCount {
     val sc = new SparkContext(sparkConf)
 
     // retrieve data
-    val inputf = sc.wholeTextFiles(IN_PATH + "abstract_text", 4).map(line => (line._1.substring(line._1.lastIndexOf("/") + 1, line._1.length), lemmatize(line._2)))
+    val inputf = sc.wholeTextFiles(IN_PATH + "abstract_text", 20).map(line => (line._1.substring(line._1.lastIndexOf("/") + 1, line._1.length), lemmatize(line._2)))
     val stopwords = sc.textFile(IN_PATH + "stopwords.txt").collect()
     val stopwordBroadCast = sc.broadcast(stopwords)
 
@@ -53,67 +53,6 @@ object SparkWordCount {
     })
 
     val triples = input.flatMap(line => line)
-
-    /*
-    map(line => {
-      var subject = ""
-      var obj = ""
-
-      if(line._1.contains(" "))
-      {
-        val work = line._1.split(" ").filter(!stopwordBroadCast.value.contains(_))
-
-        for(i <- 0 until (work.length - 1))
-        {
-          if(work(i).compareTo("ad") == 0)
-          {
-            work(i) = "alzheimers disease"
-          }
-        }
-
-        subject = work.mkString(" ")
-      }
-      else
-      {
-        if(line._1.compareTo("ad") == 0)
-        {
-          subject = "alzheimers disease"
-        }
-        else
-        {
-          subject = line._1
-        }
-      }
-
-      if(line._3.contains(" "))
-      {
-        val work = line._3.split(" ").filter(!stopwordBroadCast.value.contains(_))
-
-        for(i <- 0 until (work.length - 1))
-        {
-          if(work(i).compareTo("ad") == 0)
-          {
-            work(i) = "alzheimers disease"
-          }
-        }
-
-        obj = work.mkString(" ")
-      }
-      else
-      {
-        if(line._3.compareTo("ad") == 0)
-        {
-          obj = "alzheimers disease"
-        }
-        else
-        {
-          obj = line._3
-        }
-      }
-
-      (subject, line._2, obj, line._4, line._5, line._6)
-    })
-     */
 
     val triplets = triples.map(line => {
       var subject = ""
@@ -304,7 +243,7 @@ object SparkWordCount {
           val medObjectsWork = medObjects.toLocalIterator.toList
 
           val tripSub = medTriplets.map(line => {
-            var subj = "Subject"
+            var subj = "Other"
             val item = line.split(",").head
             medSubjectsWork.foreach(ele => if(ele.contains(item)) {
               subj = ele.split(",").head
@@ -314,7 +253,7 @@ object SparkWordCount {
           })
 
           val tripBoth = tripSub.map(line => {
-            var obj = "Object"
+            var obj = "Other"
             val item = line._2.split(",").drop(2).head
             medObjectsWork.foreach(ele => if(ele.contains(item)) {
               obj = ele.split(",").head
@@ -323,29 +262,25 @@ object SparkWordCount {
             (line._2.split(",").drop(1).dropRight(1).head, line._1, line._3, obj, item, line._2)
           })
 
-          val medFixed = tripBoth.map(line => if(line._2.compareTo("Subject") == 0 && line._4.compareTo("Object") == 0) {
+          val medFixed = tripBoth.map(line => if(line._2.compareTo("Other") == 0 && line._4.compareTo("Other") == 0) {
             ("","","","","","")
           }
           else {
             line
-          }).distinct().filter(line => line._1.compareTo("") != 0)
+          }).distinct().filter(line => line._1.compareTo("") != 0).cache()
 
-          println("MedWordCount" + wordMed.count())
-          System.out.println("MedTriplets: " + medTriplets.count)
-          System.out.println("MedSubjects: " + medSubjects.count)
-          System.out.println("MedObjects: " + medObjects.count)
-          System.out.println("MedWords: " + flatMed.count)
-
-          System.out.println("FinalTriplets: " + medFixed.count)
+          val outMedTotals = List("MedWordCount," + wordMed.count(), "MedTriplets," + medTriplets.count, "MedSubjects," + medSubjects.count,
+            "MedObjects," + medObjects.count, "MedWords," + flatMed.count, "FinalTriplets," + medFixed.count)
+          sc.parallelize(outMedTotals).map(line => line).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medTotals")
 
           medSubjects.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medSubjects")
           medObjects.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medObjects")
           medFixed.map(line => line._6).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medTriplets")
           medFixed.map(line => line._1 + "," + line._2 + "," + line._4 + ",Func").distinct().coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "tripBoth")
-          medFixed.map(line => if(line._2.compareTo("Subject") == 0) {
+          medFixed.map(line => if(line._2.compareTo("Other") == 0) {
             line._2 + "," + line._3
           }
-          else if (line._4.compareTo("Object") == 0){
+          else if (line._4.compareTo("Other") == 0){
             line._4 + "," + line._5
           }
           else {
@@ -377,21 +312,9 @@ object SparkWordCount {
     val output = wc.reduceByKey(_+_)
     output.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outCount")
 
-   val outTotals = List(("WordCount", wcTotal), ("NGram2Count", ngram2Total.collect().head._2), ("NGram3Count", ngram3Total.collect().head._2), ("WordNetCount", wordnetCountTotal))
-    sc.parallelize(outTotals).map(line => line._1 + "," + line._2).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "totals")
-
-    println("WordCount" + wcTotal)
-
-    println("NGram2Count" + ngram2Total.collect().head._2)
-    println("NGram3Count" + ngram3Total.collect().head._2)
-
-    println("WordNetCount" + wordnetCountTotal)
-
-    System.out.println("Subjects: " + subjects.count)
-    System.out.println("Objects: " + objects.count)
-    System.out.println("Predicates: " + predicates.count)
-    System.out.println("Triplets: " + triplets.map(line => line._6).sum())
-    System.out.println("UniqueTriplets: " + triplets.count)
+    val outTotals = List("WordCount," + wcTotal, "NGram2Count," + ngram2Total.collect().head._2, "NGram3Count," + ngram3Total.collect().head._2, "WordNetCount," + wordnetCountTotal,
+      "Subjects," + subjects.count, "Objects," + objects.count, "Predicates," + predicates.count, "Triplets," + triplets.map(line => line._6).sum(), "UniqueTriplets," + triplets.count)
+    sc.parallelize(outTotals).map(line => line).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "totals")
 
     triplets.map(line => line._5 + "," + line._4 + "," + line._1 + ";" + line._2 + ";" + line._3 + ","+ line._6).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "triplets")
     triplets.map(line => line._1 + ";" + line._2 + ";" + line._3).coalesce(1, shuffle = true).filter(line => line != ";;").saveAsTextFile(OUT_PATH + "triples")
