@@ -89,22 +89,16 @@ object SparkWordCount {
 
     // lemmatize the data
     val lemmatized = inputf.map(line => line._2).cache()
-    val flatLemma = lemmatized.flatMap(list => list).map(line => if(line._1.compareTo(".") == 0) {
-      ("", "")
-    }
-    else
-    {
-      line
-    })
+    val flatLemma = lemmatized.flatMap(list => list).filter(line => !stopwordBroadCast.value.contains(line._1))
 
     val lemmatizedSeq = flatLemma.map(list => List(list._1))
     val ngram2LemmaSeq = lemmatized.map(line => {
-      val ngrams = getNGrams(line.map(line => line._1).mkString(" ").replaceAll("[.]", ""), 2).map(list => list.mkString(" ")).toList
+      val ngrams = getNGrams(line.map(line => line._1).filter(line => !stopwordBroadCast.value.contains(line)).mkString(" ").replaceAll("[.]", ""), 2).map(list => list.mkString(" ")).toList
       ngrams
     })
 
     val ngram3LemmaSeq = lemmatized.map(line => {
-      val ngrams = getNGrams(line.map(line => line._1).mkString(" ").replaceAll("[.]", ""), 3).map(list => list.mkString(" ")).toList
+      val ngrams = getNGrams(line.map(line => line._1).filter(line => !stopwordBroadCast.value.contains(line)).mkString(" ").replaceAll("[.]", ""), 3).map(list => list.mkString(" ")).toList
       ngrams
     })
 
@@ -163,7 +157,6 @@ object SparkWordCount {
           val medSeq = wordMed.map(word => List(word))
 
           val tf_idf = TF_IDF(medSeq, sc)
-
           tf_idf.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outMedTFIDF")
 
           val outMed = flatMed.reduceByKey(_+_)
