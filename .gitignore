@@ -45,3 +45,8 @@ project/target/
 target/
 .scala_dependencies
 .worksheet
+
+ICP_5/data/
+RetrieveAbstract/new_data_alz/
+RetrieveAbstract/new_data_allergy/
+*.owl

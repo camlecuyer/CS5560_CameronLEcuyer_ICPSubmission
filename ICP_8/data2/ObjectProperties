@@ -1,0 +1,4 @@
+isIn,Disease,Species,Func
+wasAssociatedWith,Disease,Object,Func
+prevents,Subject,Gene,Func
+isIn,Subject,Disease,Func
