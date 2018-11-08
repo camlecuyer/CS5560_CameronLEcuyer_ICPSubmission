@@ -6,7 +6,7 @@ import edu.stanford.nlp.pipeline.Annotation
 import edu.stanford.nlp.pipeline.StanfordCoreNLP
 import edu.stanford.nlp.simple
 import edu.stanford.nlp.simple.Document
-import org.apache.spark.mllib.feature.{HashingTF, IDF}
+import org.apache.spark.mllib.feature.{HashingTF, IDF, Word2Vec}
 import org.apache.spark.rdd.RDD
 
 import scala.collection.JavaConverters._
@@ -34,6 +34,14 @@ object SparkWordCount {
     val inputf = sc.wholeTextFiles(IN_PATH + "abstract_text", 20).map(line => (line._1.substring(line._1.lastIndexOf("/") + 1, line._1.length), lemmatize(line._2)))
     val stopwords = sc.textFile(IN_PATH + "stopwords.txt").collect()
     val stopwordBroadCast = sc.broadcast(stopwords)
+
+    val schemawords = sc.textFile(IN_PATH + "schema_words.txt").map(line => if(line.contains(",")) {
+      line.split(",").toList
+    }
+    else {
+      List(line)
+    }).flatMap(line => line).collect()
+    val schemawordBroadCast = sc.broadcast(schemawords)
 
     val lemmaInput = inputf.map(line => {
       val lemmas = line._2
@@ -80,7 +88,7 @@ object SparkWordCount {
         obj = line._3
       }
 
-      (subject, line._2, obj, line._4, line._5, line._6)
+      (toCamelCase(subject), toCamelCase(line._2), toCamelCase(obj), line._4, line._5, line._6)
     }).cache()
 
     val predicates = triplets.map(line => line._2).distinct().filter(line => line != "")
@@ -92,7 +100,7 @@ object SparkWordCount {
     val flatLemma = lemmatized.flatMap(list => list).filter(line => !stopwordBroadCast.value.contains(line._1))
 
     val lemmatizedSeq = flatLemma.map(list => List(list._1))
-    val ngram2LemmaSeq = lemmatized.map(line => {
+/*    val ngram2LemmaSeq = lemmatized.map(line => {
       val ngrams = getNGrams(line.map(line => line._1).filter(line => !stopwordBroadCast.value.contains(line)).mkString(" ").replaceAll("[.]", ""), 2).map(list => list.mkString(" ")).toList
       ngrams
     })
@@ -116,180 +124,218 @@ object SparkWordCount {
     // count for wordnet words
     val wordnetCount = flatLemma.map(word => if(new RiWordNet("C:\\WordNet\\WordNet-3.0").exists(word._1)) (word._1 + "," + word._2, 1) else (word._1 + "," + word._2, 0)).reduceByKey(_+_)
     val wordnetCountTotal = wordnetCount.count()
+*/
+    // medical word retrieval
+    if (args.length < 2) {
+      System.out.println("\n$ java RESTClientGet [Bioconcept] [Inputfile] [Format]")
+      System.out.println("\nBioconcept: We support five kinds of bioconcepts, i.e., Gene, Disease, Chemical, Species, Mutation. When 'BioConcept' is used, all five are included.\n\tInputfile: a file with a pmid list\n\tFormat: PubTator (tab-delimited text file), BioC (xml), and JSON\n\n")
+    }
+    else
+    {
+      val Bioconcept = args(0)
+      val Inputfile = args(1)
+      var Format = "PubTator"
+      if (args.length > 2) Format = args(2)
 
-    val medThread = new Thread(new Runnable {
-      def run(): Unit = {
-        // medical word retrieval
-        if (args.length < 2) {
-          System.out.println("\n$ java RESTClientGet [Bioconcept] [Inputfile] [Format]")
-          System.out.println("\nBioconcept: We support five kinds of bioconcepts, i.e., Gene, Disease, Chemical, Species, Mutation. When 'BioConcept' is used, all five are included.\n\tInputfile: a file with a pmid list\n\tFormat: PubTator (tab-delimited text file), BioC (xml), and JSON\n\n")
+      val medWords = ListBuffer.empty[(String, String)]
+
+      // retieve ids and get data
+      for (line <- Source.fromFile(Inputfile).getLines) {
+        val data = get("https://www.ncbi.nlm.nih.gov/CBBresearch/Lu/Demo/RESTful/tmTool.cgi/" + Bioconcept + "/" + line + "/" + Format + "/")
+        val lines = data.flatMap(line => {line.split("\n")}).drop(2)
+
+        // drop unused parts of output
+        val words = lines.map(word => word.split("\t").drop(3).dropRight(1).mkString(",")).toArray
+
+        // places word and designation in tuple
+        for(i <- 0 until (words.length - 1))
+        {
+          val splitWord = words(i).split(",")
+          val work = (splitWord.head, splitWord.last)
+          medWords += work
+        } // end loop
+      } // end loop
+
+      val medWordData = sc.parallelize(medWords.toList)
+      val flatMed = medWordData.map(word => (word._1.toLowerCase + ", " + word._2.toLowerCase, 1))
+      val medType = medWordData.map(word => (word._2.toLowerCase, 1))
+      val wordMed = medWordData.map(word => word._1.toLowerCase).distinct()
+      val medSeq = wordMed.map(word => List(word))
+
+      //val tf_idf = TF_IDF(medSeq, sc)
+      //tf_idf.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outMedTFIDF")
+
+      /*val word2vec = new Word2Vec().setVectorSize(1000)
+
+      val model = word2vec.fit(lemmatizedSeq)
+
+      // reference: https://stackoverflow.com/questions/4089537/scala-catching-an-exception-within-a-map
+      val wordVec = tf_idf.collect().map( word => try{Left((word._1, model.findSynonyms(word._1, 5)))}catch{case e: IllegalStateException => Right(e)})
+
+      val (synonym, errors) = wordVec.partition {_.isLeft}
+      val synonyms = synonym.map(_.left.get)
+
+      val data = sc.parallelize(synonyms.map(word => word._1 + ":" + word._2.mkString(",")).toSeq)
+      data.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outMedW2V")*/
+/*
+      val outMed = flatMed.reduceByKey(_+_)
+      outMed.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outMed")
+
+      val outMedType = medType.reduceByKey(_+_)
+      outMedType.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outMedType")
+*/
+      val medData = medWordData.map(line => if (line._1.toLowerCase.compareTo(line._2.toLowerCase) != 0)
+      {
+        (toCamelCase(line._1.replaceAll("[']", "").toLowerCase), line._2.toLowerCase.capitalize)
+      }
+      else
+      {
+        (toCamelCase(line._1.toLowerCase), "Misc")
+      }).distinct().filter(line => line._1.length > 1)
+
+      val workMed = medData.filter(line => line._1.length > 2).toLocalIterator.toSet
+      val workTriples = triplets.map(line => (toCamelCase(line._1), toCamelCase(line._2), toCamelCase(line._3)))
+
+      val medSubjects = subjects.map(line => {
+        var found : Boolean = false
+        var subject = ""
+        workMed.foreach(ele => if(line.toLowerCase.contains(ele._1.toLowerCase) && !found)
+        {
+          found = true
+          subject = ele._2
+        })
+
+        if(found)
+        {
+          subject + "," + line
         }
         else
         {
-          val Bioconcept = args(0)
-          val Inputfile = args(1)
-          var Format = "PubTator"
-          if (args.length > 2) Format = args(2)
+          ""
+        }
+      }).distinct().filter(line => line != "")
 
-          val medWords = ListBuffer.empty[(String, String)]
+      val medObjects = objects.map(line => {
+        var found : Boolean = false
+        var obj = ""
+        workMed.foreach(ele => if(line.toLowerCase.contains(ele._1.toLowerCase) && !found)
+        {
+          found = true
+          obj = ele._2
+        })
 
-          // retieve ids and get data
-          for (line <- Source.fromFile(Inputfile).getLines) {
-            val data = get("https://www.ncbi.nlm.nih.gov/CBBresearch/Lu/Demo/RESTful/tmTool.cgi/" + Bioconcept + "/" + line + "/" + Format + "/")
-            val lines = data.flatMap(line => {line.split("\n")}).drop(2)
+        if(found)
+        {
+          obj + "," + line
+        }
+        else
+        {
+          ""
+        }
+      }).distinct().filter(line => line != "")
 
-            // drop unused parts of output
-            val words = lines.map(word => word.split("\t").drop(3).dropRight(1).mkString(",")).toArray
+      val schemaTemp = medObjects.union(medSubjects).map(line => line.split(",").drop(1).head)
+      val ontSchema = schemaTemp.map(line => {
+        var found : Boolean = false
+        var schemaWord = "Other"
+        schemawordBroadCast.value.foreach(ele => if(line.toLowerCase.replaceAll("[_]", " ").contains(ele.toLowerCase()) && !found) {
+          schemaWord = ele
+          found = true
+        })
 
-            // places word and designation in tuple
-            for(i <- 0 until (words.length - 1))
-            {
-              val splitWord = words(i).split(",")
-              val work = (splitWord.head, splitWord.last)
-              medWords += work
-            } // end loop
-          } // end loop
+        schemaWord + "," + line
+      }).cache()
 
-          val medWordData = sc.parallelize(medWords.toList)
-          val flatMed = medWordData.map(word => (word._1.toLowerCase + ", " + word._2.toLowerCase, 1))
-          val medType = medWordData.map(word => (word._2.toLowerCase, 1))
-          val wordMed = medWordData.map(word => word._1.toLowerCase).distinct()
-          val medSeq = wordMed.map(word => List(word))
+      ontSchema.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "ontSchema")
+      ontSchema.map(line => (line.split(",").head, 1)).reduceByKey(_+_).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "ontSchemaCount")
 
-          val tf_idf = TF_IDF(medSeq, sc)
-          tf_idf.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outMedTFIDF")
+      val medTriplets = workTriples.map(line => {
+        var found : Boolean = false
+        workMed.foreach(ele => if((line._1.toLowerCase.contains(ele._1.toLowerCase) || line._3.toLowerCase.contains(ele._1.toLowerCase)) && !found)
+        {
+          found = true
+        })
 
-          val outMed = flatMed.reduceByKey(_+_)
-          outMed.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outMed")
+        if(found)
+        {
+          line._1 + "," + line._2 + "," + line._3 + "," + "Obj" //+ ";" + line._1
+        }
+        else
+        {
+          ""
+        }
+      }).distinct().filter(line => line != "")
 
-          val outMedType = medType.reduceByKey(_+_)
-          outMedType.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outMedType")
+      val medSubjectsWork = medSubjects.toLocalIterator.toList
+      val medObjectsWork = medObjects.toLocalIterator.toList
 
-          val medData = medWordData.map(line => if (line._1.toLowerCase.compareTo(line._2.toLowerCase) != 0)
-          {
-            (toCamelCase(line._1.replaceAll("[']", "").toLowerCase), line._2.toLowerCase.capitalize)
-          }
-          else
-          {
-            (toCamelCase(line._1.toLowerCase), "Misc")
-          }).distinct().filter(line => line._1.length > 1)
+      val tripSub = medTriplets.map(line => {
+        var subj = "Other"
+        val item = line.split(",").head
+        medSubjectsWork.foreach(ele => if(ele.contains(item)) {
+          subj = ele.split(",").head
+        })
 
-          val workMed = medData.filter(line => line._1.length > 2).toLocalIterator.toSet
-          val workTriples = triplets.map(line => (toCamelCase(line._1), toCamelCase(line._2), toCamelCase(line._3)))
+        (subj, line, item)
+      })
 
-          val medSubjects = subjects.map(line => {
-            var found : Boolean = false
-            var subject = ""
-            workMed.foreach(ele => if(line.toLowerCase.contains(ele._1.toLowerCase) && !found)
-            {
-              found = true
-              subject = ele._2
-            })
+      val tripBoth = tripSub.map(line => {
+        var obj = "Other"
+        val item = line._2.split(",").drop(2).head
+        medObjectsWork.foreach(ele => if(ele.contains(item)) {
+          obj = ele.split(",").head
+        })
 
-            if(found)
-            {
-              subject + "," + line
-            }
-            else
-            {
-              ""
-            }
-          }).distinct().filter(line => line != "")
+        (line._2.split(",").drop(1).dropRight(1).head, line._1, line._3, obj, item, line._2)
+      })
 
-          val medObjects = objects.map(line => {
-            var found : Boolean = false
-            var obj = ""
-            workMed.foreach(ele => if(line.toLowerCase.contains(ele._1.toLowerCase) && !found)
-            {
-              found = true
-              obj = ele._2
-            })
+      val medFixed = tripBoth.map(line => if(line._2.compareTo("Other") == 0 && line._4.compareTo("Other") == 0) {
+        ("","","","","","")
+      }
+      else {
+        line
+      }).distinct().filter(line => line._1.compareTo("") != 0).cache()
 
-            if(found)
-            {
-              obj + "," + line
-            }
-            else
-            {
-              ""
-            }
-          }).distinct().filter(line => line != "")
+      // needs distinct removed from mebSubjects and medObjects to work correctly
+      //TF_IDF(medSubjects.map(line => List(line.split(",").drop(1).head.replaceAll("[_]", " "))), sc).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medSubTFIDF")
+      //TF_IDF(medObjects.map(line => List(line.split(",").drop(1).head.replaceAll("[_]", " "))), sc).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medObjTFIDF")
 
-          val medTriplets = workTriples.map(line => {
-            var found : Boolean = false
-            workMed.foreach(ele => if((line._1.toLowerCase.contains(ele._1.toLowerCase) || line._3.toLowerCase.contains(ele._1.toLowerCase)) && !found)
-            {
-              found = true
-            })
+      val outMedTotals = List("MedWordCount," + wordMed.count(), "MedTriplets," + medTriplets.count, "MedSubjects," + medSubjects.count,
+        "MedObjects," + medObjects.count, "MedWords," + flatMed.count, "FinalTriplets," + medFixed.count)
+      sc.parallelize(outMedTotals).map(line => line).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medTotals")
 
-            if(found)
-            {
-              line._1 + "," + line._2 + "," + line._3 + "," + "Obj" //+ ";" + line._1
-            }
-            else
-            {
-              ""
-            }
-          }).distinct().filter(line => line != "")
-
-          val medSubjectsWork = medSubjects.toLocalIterator.toList
-          val medObjectsWork = medObjects.toLocalIterator.toList
-
-          val tripSub = medTriplets.map(line => {
-            var subj = "Other"
-            val item = line.split(",").head
-            medSubjectsWork.foreach(ele => if(ele.contains(item)) {
-              subj = ele.split(",").head
-            })
-
-            (subj, line, item)
-          })
-
-          val tripBoth = tripSub.map(line => {
-            var obj = "Other"
-            val item = line._2.split(",").drop(2).head
-            medObjectsWork.foreach(ele => if(ele.contains(item)) {
-              obj = ele.split(",").head
-            })
-
-            (line._2.split(",").drop(1).dropRight(1).head, line._1, line._3, obj, item, line._2)
-          })
-
-          val medFixed = tripBoth.map(line => if(line._2.compareTo("Other") == 0 && line._4.compareTo("Other") == 0) {
-            ("","","","","","")
-          }
-          else {
-            line
-          }).distinct().filter(line => line._1.compareTo("") != 0).cache()
-
-          val outMedTotals = List("MedWordCount," + wordMed.count(), "MedTriplets," + medTriplets.count, "MedSubjects," + medSubjects.count,
-            "MedObjects," + medObjects.count, "MedWords," + flatMed.count, "FinalTriplets," + medFixed.count)
-          sc.parallelize(outMedTotals).map(line => line).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medTotals")
-
-          medSubjects.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medSubjects")
-          medObjects.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medObjects")
-          medFixed.map(line => line._6).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medTriplets")
-          medFixed.map(line => line._1 + "," + line._2 + "," + line._4 + ",Func").distinct().coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "tripBoth")
-          medFixed.map(line => if(line._2.compareTo("Other") == 0) {
-            line._2 + "," + line._3
-          }
-          else if (line._4.compareTo("Other") == 0){
-            line._4 + "," + line._5
-          }
-          else {
-            ""
-          }).distinct().filter(line => line.compareTo("") != 0).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "otherIndivid")
-          medData.map(line => line._2 + ","+ line._1).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medWords")
-        } // end if
-      } // end unit
-    }) // end thread
-
-    // start thread for medical data
-    medThread.start()
-
+      medSubjects.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medSubjects")
+      medObjects.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medObjects")
+      medFixed.map(line => line._6).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medTriplets")
+      medFixed.map(line => line._1 + "," + line._2 + "," + line._4 + ",Func").distinct().coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "tripBoth")
+      medFixed.map(line => if(line._2.compareTo("Other") == 0) {
+        line._2 + "," + line._3
+      }
+      else if (line._4.compareTo("Other") == 0){
+        line._4 + "," + line._5
+      }
+      else {
+        ""
+      }).distinct().filter(line => line.compareTo("") != 0).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "otherIndivid")
+      //medData.map(line => line._2 + ","+ line._1).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medWords")
+    } // end if
+/*
     val tf_idf = TF_IDF(lemmatizedSeq, sc)
-    tf_idf.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outLemmaTFIDF")
+    //tf_idf.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outLemmaTFIDF")
 
+    val word2vec = new Word2Vec().setVectorSize(1000)
+
+    val model = word2vec.fit(lemmatizedSeq)
+
+    // reference: https://stackoverflow.com/questions/4089537/scala-catching-an-exception-within-a-map
+    val wordVec = tf_idf.collect().map( word => try{Left((word._1, model.findSynonyms(word._1, 5)))}catch{case e: IllegalStateException => Right(e)})
+
+    val (synonym, errors) = wordVec.partition {_.isLeft}
+    val synonyms = synonym.map(_.left.get)
+
+    val data = sc.parallelize(synonyms.map(word => word._1 + ":" + word._2.mkString(",")).toSeq)
+    data.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outLemmaW2V")*/
+/*
     val tf_idf_ngram2 = TF_IDF(ngram2LemmaSeq, sc)
     tf_idf_ngram2.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outNgram2TFIDF")
 
@@ -307,7 +353,7 @@ object SparkWordCount {
 
     val outTotals = List("WordCount," + wcTotal, "NGram2Count," + ngram2Total.collect().head._2, "NGram3Count," + ngram3Total.collect().head._2, "WordNetCount," + wordnetCountTotal,
       "Subjects," + subjects.count, "Objects," + objects.count, "Predicates," + predicates.count, "Triplets," + triplets.map(line => line._6).sum(), "UniqueTriplets," + triplets.count)
-    sc.parallelize(outTotals).map(line => line).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "totals")
+    sc.parallelize(outTotals).map(line => line).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "totals")*/
 
     triplets.map(line => line._5 + "," + line._4 + "," + line._1 + ";" + line._2 + ";" + line._3 + ","+ line._6).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "triplets")
     triplets.map(line => line._1 + ";" + line._2 + ";" + line._3).coalesce(1, shuffle = true).filter(line => line != ";;").saveAsTextFile(OUT_PATH + "triples")
@@ -458,7 +504,7 @@ object SparkWordCount {
         }
       }
 
-      lemma += ((toCamelCase(subject.toLowerCase), toCamelCase(predicate.toLowerCase), toCamelCase(obj.toLowerCase), sent.toString, docName, count))
+      lemma += ((subject.toLowerCase, predicate.toLowerCase, obj.toLowerCase, sent.toString, docName, count))
     }
     lemma
   } // end returnTriplets
