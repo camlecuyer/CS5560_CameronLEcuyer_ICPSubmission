@@ -19,22 +19,26 @@ import scala.collection.mutable.ListBuffer
 
 object SparkWordCount {
 
-  private val OUT_PATH = "C:\\Users\\CJ\\Box\\projectOutput\\" //"C:\\Users\\camle\\Box\\projectOutput\\"
-  private val IN_PATH = "C:\\Users\\CJ\\Box\\data\\" //"C:\\Users\\camle\\Box\\data\\"
+  private val OUT_PATH = "C:\\Users\\CJ\\Box\\projectOutput\\"
+  private val IN_PATH = "C:\\Users\\CJ\\Box\\data\\"
 
   def main(args: Array[String]) {
 
+    // Get hadoop from winutils
     System.setProperty("hadoop.home.dir","C:\\winutils")
 
     val sparkConf = new SparkConf().setAppName("SparkWordCount").setMaster("local[*]")
 
     val sc = new SparkContext(sparkConf)
 
-    // retrieve data
-    val inputf = sc.wholeTextFiles(IN_PATH + "abstract_text", 20).map(line => (line._1.substring(line._1.lastIndexOf("/") + 1, line._1.length), lemmatize(line._2)))
+    // retrieve data and lemmatize it
+    val inputf = sc.wholeTextFiles(IN_PATH + "abstract_text", 20).map(line => (line._1.substring(line._1.lastIndexOf("/") + 1, line._1.length), lemmatize(line._2))).cache()
+
+    // retrieve stopwords
     val stopwords = sc.textFile(IN_PATH + "stopwords.txt").collect()
     val stopwordBroadCast = sc.broadcast(stopwords)
 
+    // retrieve shcemawords
     val schemawords = sc.textFile(IN_PATH + "schema_words.txt").map(line => if(line.contains(",")) {
       line.split(",").toList
     }
@@ -43,6 +47,7 @@ object SparkWordCount {
     }).flatMap(line => line).collect()
     val schemawordBroadCast = sc.broadcast(schemawords)
 
+    // get the lemmas and create a sentence for use with triplets
     val lemmaInput = inputf.map(line => {
       val lemmas = line._2
 
@@ -52,9 +57,11 @@ object SparkWordCount {
 
       val lemmaSent = temp.trim
 
+      // pass in abstract name and lemma sentence
       (line._1, lemmaSent)
     })
 
+    // get triplets
     val input = lemmaInput.map(line => {
       val triples = returnTriplets(line._2, line._1)
       triples
@@ -62,6 +69,7 @@ object SparkWordCount {
 
     val triples = input.flatMap(line => line)
 
+    // remove stop words from the triplets
     val triplets = triples.map(line => {
       var subject = ""
       var obj = ""
@@ -91,25 +99,33 @@ object SparkWordCount {
       (toCamelCase(subject), toCamelCase(line._2), toCamelCase(obj), line._4, line._5, line._6)
     }).cache()
 
+    // get predicates, subjects, and objects from triplets
     val predicates = triplets.map(line => line._2).distinct().filter(line => line != "")
     val subjects = triplets.map(line => line._1).distinct().filter(line => line != "")
     val objects = triplets.map(line => line._3).distinct().filter(line => line != "")
 
-    // lemmatize the data
+    // get counts for preidcates and entities (need to remove distinct keyword from sets)
+    //subjects.union(objects).map(line => (line, 1)).reduceByKey(_+_).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "entityCount")
+    //predicates.map(line => (line, 1)).reduceByKey(_+_).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "predCount")
+
+    // get lemmatized the data
     val lemmatized = inputf.map(line => line._2).cache()
     val flatLemma = lemmatized.flatMap(list => list).filter(line => !stopwordBroadCast.value.contains(line._1))
-
     val lemmatizedSeq = flatLemma.map(list => List(list._1))
-/*    val ngram2LemmaSeq = lemmatized.map(line => {
+
+    // get bigrams
+    val ngram2LemmaSeq = lemmatized.map(line => {
       val ngrams = getNGrams(line.map(line => line._1).filter(line => !stopwordBroadCast.value.contains(line)).mkString(" ").replaceAll("[.]", ""), 2).map(list => list.mkString(" ")).toList
       ngrams
     })
 
+    // get trigrams
     val ngram3LemmaSeq = lemmatized.map(line => {
       val ngrams = getNGrams(line.map(line => line._1).filter(line => !stopwordBroadCast.value.contains(line)).mkString(" ").replaceAll("[.]", ""), 3).map(list => list.mkString(" ")).toList
       ngrams
     })
 
+    // count the bigrams and trigrams
     val ngram2Num = ngram2LemmaSeq.map(line => ("total", line.length))
     val ngram2Total = ngram2Num.reduceByKey(_+_)
 
@@ -124,7 +140,7 @@ object SparkWordCount {
     // count for wordnet words
     val wordnetCount = flatLemma.map(word => if(new RiWordNet("C:\\WordNet\\WordNet-3.0").exists(word._1)) (word._1 + "," + word._2, 1) else (word._1 + "," + word._2, 0)).reduceByKey(_+_)
     val wordnetCountTotal = wordnetCount.count()
-*/
+
     // medical word retrieval
     if (args.length < 2) {
       System.out.println("\n$ java RESTClientGet [Bioconcept] [Inputfile] [Format]")
@@ -162,10 +178,11 @@ object SparkWordCount {
       val wordMed = medWordData.map(word => word._1.toLowerCase).distinct()
       val medSeq = wordMed.map(word => List(word))
 
-      //val tf_idf = TF_IDF(medSeq, sc)
-      //tf_idf.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outMedTFIDF")
+      // get tf-idf and word2vec for medwords
+      val tf_idf = TF_IDF(medSeq, sc)
+      tf_idf.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outMedTFIDF")
 
-      /*val word2vec = new Word2Vec().setVectorSize(1000)
+      val word2vec = new Word2Vec().setVectorSize(1000)
 
       val model = word2vec.fit(lemmatizedSeq)
 
@@ -176,14 +193,16 @@ object SparkWordCount {
       val synonyms = synonym.map(_.left.get)
 
       val data = sc.parallelize(synonyms.map(word => word._1 + ":" + word._2.mkString(",")).toSeq)
-      data.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outMedW2V")*/
-/*
+      data.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outMedW2V")
+
       val outMed = flatMed.reduceByKey(_+_)
       outMed.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outMed")
 
+      // output the count of medwords
       val outMedType = medType.reduceByKey(_+_)
       outMedType.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outMedType")
-*/
+
+      // retag all medwords that do not have a proper tag
       val medData = medWordData.map(line => if (line._1.toLowerCase.compareTo(line._2.toLowerCase) != 0)
       {
         (toCamelCase(line._1.replaceAll("[']", "").toLowerCase), line._2.toLowerCase.capitalize)
@@ -194,8 +213,9 @@ object SparkWordCount {
       }).distinct().filter(line => line._1.length > 1)
 
       val workMed = medData.filter(line => line._1.length > 2).toLocalIterator.toSet
-      val workTriples = triplets.map(line => (toCamelCase(line._1), toCamelCase(line._2), toCamelCase(line._3)))
+      val workTriples = triplets.map(line => (line._1, line._2, line._3))
 
+      // find all subjects with medwords
       val medSubjects = subjects.map(line => {
         var found : Boolean = false
         var subject = ""
@@ -215,6 +235,7 @@ object SparkWordCount {
         }
       }).distinct().filter(line => line != "")
 
+      // find all objects with medwords
       val medObjects = objects.map(line => {
         var found : Boolean = false
         var obj = ""
@@ -234,6 +255,7 @@ object SparkWordCount {
         }
       }).distinct().filter(line => line != "")
 
+      // find all entities that contain a schema word
       val schemaTemp = medObjects.union(medSubjects).map(line => line.split(",").drop(1).head)
       val ontSchema = schemaTemp.map(line => {
         var found : Boolean = false
@@ -249,6 +271,7 @@ object SparkWordCount {
       ontSchema.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "ontSchema")
       ontSchema.map(line => (line.split(",").head, 1)).reduceByKey(_+_).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "ontSchemaCount")
 
+      // covert all work triplets that contain a medword into a string with Obj at the end
       val medTriplets = workTriples.map(line => {
         var found : Boolean = false
         workMed.foreach(ele => if((line._1.toLowerCase.contains(ele._1.toLowerCase) || line._3.toLowerCase.contains(ele._1.toLowerCase)) && !found)
@@ -258,7 +281,7 @@ object SparkWordCount {
 
         if(found)
         {
-          line._1 + "," + line._2 + "," + line._3 + "," + "Obj" //+ ";" + line._1
+          line._1 + "," + line._2 + "," + line._3 + "," + "Obj"
         }
         else
         {
@@ -269,6 +292,7 @@ object SparkWordCount {
       val medSubjectsWork = medSubjects.toLocalIterator.toList
       val medObjectsWork = medObjects.toLocalIterator.toList
 
+      // loop through triplets with medwords and find the BioNLP type for the subject
       val tripSub = medTriplets.map(line => {
         var subj = "Other"
         val item = line.split(",").head
@@ -279,6 +303,7 @@ object SparkWordCount {
         (subj, line, item)
       })
 
+      // loop through triplets with medwords and subject type and find the BioNLP type for the object
       val tripBoth = tripSub.map(line => {
         var obj = "Other"
         val item = line._2.split(",").drop(2).head
@@ -289,6 +314,7 @@ object SparkWordCount {
         (line._2.split(",").drop(1).dropRight(1).head, line._1, line._3, obj, item, line._2)
       })
 
+      // remove any triplet that has no BioNLP tupe
       val medFixed = tripBoth.map(line => if(line._2.compareTo("Other") == 0 && line._4.compareTo("Other") == 0) {
         ("","","","","","")
       }
@@ -296,18 +322,21 @@ object SparkWordCount {
         line
       }).distinct().filter(line => line._1.compareTo("") != 0).cache()
 
-      // needs distinct removed from mebSubjects and medObjects to work correctly
+      // gets tf-idf for medsubjects and medobjects (needs distinct removed from mebSubjects and medObjects to work correctly)
       //TF_IDF(medSubjects.map(line => List(line.split(",").drop(1).head.replaceAll("[_]", " "))), sc).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medSubTFIDF")
       //TF_IDF(medObjects.map(line => List(line.split(",").drop(1).head.replaceAll("[_]", " "))), sc).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medObjTFIDF")
 
+      // holds totals for med items
       val outMedTotals = List("MedWordCount," + wordMed.count(), "MedTriplets," + medTriplets.count, "MedSubjects," + medSubjects.count,
         "MedObjects," + medObjects.count, "MedWords," + flatMed.count, "FinalTriplets," + medFixed.count)
       sc.parallelize(outMedTotals).map(line => line).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medTotals")
 
+      // output data to files
       medSubjects.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medSubjects")
       medObjects.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medObjects")
       medFixed.map(line => line._6).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medTriplets")
       medFixed.map(line => line._1 + "," + line._2 + "," + line._4 + ",Func").distinct().coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "tripBoth")
+      // outputs the non BioNLP type to separate file
       medFixed.map(line => if(line._2.compareTo("Other") == 0) {
         line._2 + "," + line._3
       }
@@ -317,11 +346,12 @@ object SparkWordCount {
       else {
         ""
       }).distinct().filter(line => line.compareTo("") != 0).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "otherIndivid")
-      //medData.map(line => line._2 + ","+ line._1).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medWords")
+      medData.map(line => line._2 + ","+ line._1).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "medWords")
     } // end if
-/*
+
+    // gets tf-idf and word2vec for lemmatized data
     val tf_idf = TF_IDF(lemmatizedSeq, sc)
-    //tf_idf.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outLemmaTFIDF")
+    tf_idf.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outLemmaTFIDF")
 
     val word2vec = new Word2Vec().setVectorSize(1000)
 
@@ -334,14 +364,16 @@ object SparkWordCount {
     val synonyms = synonym.map(_.left.get)
 
     val data = sc.parallelize(synonyms.map(word => word._1 + ":" + word._2.mkString(",")).toSeq)
-    data.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outLemmaW2V")*/
-/*
+    data.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outLemmaW2V")
+
+    // get tf-idf for ngrams
     val tf_idf_ngram2 = TF_IDF(ngram2LemmaSeq, sc)
     tf_idf_ngram2.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outNgram2TFIDF")
 
     val tf_idf_ngram3 = TF_IDF(ngram3LemmaSeq, sc)
     tf_idf_ngram3.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outNgram3TFIDF")
 
+    // outputs counts
     val wNetCount = wordnetCount.reduceByKey(_+_)
     wNetCount.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outWordNetCount")
 
@@ -351,10 +383,12 @@ object SparkWordCount {
     val output = wc.reduceByKey(_+_)
     output.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "outCount")
 
+    // outputs totals for non medwrods
     val outTotals = List("WordCount," + wcTotal, "NGram2Count," + ngram2Total.collect().head._2, "NGram3Count," + ngram3Total.collect().head._2, "WordNetCount," + wordnetCountTotal,
       "Subjects," + subjects.count, "Objects," + objects.count, "Predicates," + predicates.count, "Triplets," + triplets.map(line => line._6).sum(), "UniqueTriplets," + triplets.count)
-    sc.parallelize(outTotals).map(line => line).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "totals")*/
+    sc.parallelize(outTotals).map(line => line).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "totals")
 
+    // outputs triplet data
     triplets.map(line => line._5 + "," + line._4 + "," + line._1 + ";" + line._2 + ";" + line._3 + ","+ line._6).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "triplets")
     triplets.map(line => line._1 + ";" + line._2 + ";" + line._3).coalesce(1, shuffle = true).filter(line => line != ";;").saveAsTextFile(OUT_PATH + "triples")
     predicates.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "predicates")
@@ -366,7 +400,6 @@ object SparkWordCount {
   // reference: https://stackoverflow.com/questions/8258963/how-to-generate-n-grams-in-scala
   def getNGrams(sentence: String, n:Int): IndexedSeq[List[String]] = {
     val words = sentence
-    //val ngrams = (for(i <- 2 to n) yield words.split(' ').sliding(i).map(word => word.toList)).flatten
     val ngrams = words.split(' ').sliding(n).map(word => word.toList).toIndexedSeq
     ngrams
   }
@@ -408,6 +441,7 @@ object SparkWordCount {
   // gets data for medical words from URL
   def get(url: String): Iterator[String] = scala.io.Source.fromURL(url).getLines()
 
+  // generates the TF-IDF for the input data
   def TF_IDF(data: RDD[List[String]], sc: SparkContext): RDD[(String, Double)] = {
     //Creating an object of HashingTF Class
     val hashingTF = new HashingTF()
@@ -456,6 +490,7 @@ object SparkWordCount {
     dd1
   } // end TF_IDF
 
+  // converts sentences from space separated to underscore separated and CamelCase
   def toCamelCase(phrase: String): String = {
     var temp = phrase
 
@@ -477,6 +512,7 @@ object SparkWordCount {
     temp
   } // end toCamelCase
 
+  // returns the longest triplet per sentence for each input file
   def returnTriplets(sentence: String, docName: String): ListBuffer[(String, String, String, String, String, Int)] = {
     val doc: Document = new Document(sentence)
     val lemma = ListBuffer.empty[(String, String, String, String, String, Int)]
@@ -496,6 +532,7 @@ object SparkWordCount {
         val temp = data.next()
         count += 1
 
+        // gets the longest triplet based on length of subject and object
         if((subject.length <= temp.first.length) && (obj.length < temp.third.length))
         {
           subject = temp.first
