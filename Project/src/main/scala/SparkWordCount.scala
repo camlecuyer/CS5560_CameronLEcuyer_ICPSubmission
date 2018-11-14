@@ -271,6 +271,18 @@ object SparkWordCount {
       ontSchema.coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "ontSchema")
       ontSchema.map(line => (line.split(",").head, 1)).reduceByKey(_+_).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "ontSchemaCount")
 
+      // work set for schema triplets
+      val ontSchemaWork = schemaTemp.map(line => {
+        var found : Boolean = false
+        var schemaWord = "Other"
+        schemawordBroadCast.value.foreach(ele => if(line.toLowerCase.replaceAll("[_]", " ").contains(ele.toLowerCase()) && !found) {
+          schemaWord = ele
+          found = true
+        })
+
+        (schemaWord.replaceAll(" ", ""), line)
+      }).cache().toLocalIterator.toSet
+
       // covert all work triplets that contain a medword into a string with Obj at the end
       val medTriplets = workTriples.map(line => {
         var found : Boolean = false
@@ -288,6 +300,30 @@ object SparkWordCount {
           ""
         }
       }).distinct().filter(line => line != "")
+
+      // matches the entities in the schema file with a triplet
+      val schemaTriples = medTriplets.map(line => {
+        var subj = "Other"
+        val item = line.split(",").head
+        var obj = "Other"
+        val item2 = line.split(",").drop(2).head
+
+        ontSchemaWork.foreach(ele => {
+          if(ele._2.compareTo(item) == 0) {
+            subj = ele._1
+          }
+
+          if(ele._2.compareTo(item2) == 0) {
+            obj = ele._1
+          }
+        })
+
+        (subj, item, line.split(",").drop(1).head, item2, obj)
+      }).cache()
+
+      schemaTriples.map(line => line._1 + "," + line._2 + "\n" + line._5 + "," + line._4).coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "ontIndivid")
+      schemaTriples.map(line => line._2 + "," + line._3 + "," + line._4 + ",Obj").coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "ontTriples")
+      schemaTriples.map(line => line._3 + "," + line._1 + "," + line._5 + ",Func").coalesce(1, shuffle = true).saveAsTextFile(OUT_PATH + "ontObjProp")
 
       val medSubjectsWork = medSubjects.toLocalIterator.toList
       val medObjectsWork = medObjects.toLocalIterator.toList
