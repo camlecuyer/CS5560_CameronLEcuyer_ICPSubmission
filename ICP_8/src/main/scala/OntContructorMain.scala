@@ -120,7 +120,6 @@ object OntContructorMain {
 
     })
 
-
     /*val dataprop=Source.fromFile("data/DataProperties").getLines()
 
     dataprop.foreach(f=>{
@@ -180,7 +179,7 @@ object OntContructorMain {
         }
     })
 
-    val os = new FileOutputStream("data/family.owl")
+    val os = new FileOutputStream("data/family_schema.owl")
     val owlxmlFormat = new OWLXMLDocumentFormat
     manager.saveOntology(ontology, owlxmlFormat, os)
     System.out.println("Ontology Created")

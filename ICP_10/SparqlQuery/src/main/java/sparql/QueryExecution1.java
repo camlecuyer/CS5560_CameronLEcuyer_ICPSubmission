@@ -12,9 +12,9 @@ import java.io.InputStream;
 public class QueryExecution1 {
 	public static void main(String args[]){
 		OntModel ontoModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_DL_MEM);
-		InputStream in = FileManager.get().open("Data/SparqlRdf.owl");
+		InputStream in = FileManager.get().open("C:\\Users\\camle\\Box\\projectOutput\\family_schema.owl");
 		ontoModel.read(in, null);
-		String queryString = "PREFIX foaf: <http://xmlns.com/foaf/0.1/> SELECT ?x ?name WHERE { ?x foaf:name ?name } " ;
+		String queryString = "PREFIX foaf: <http://www.semanticweb.org/clecuyer/ontologies/2018/10/> SELECT ?s ?o WHERE { ?s foaf:follow_By ?o } " ;
 		Query query = QueryFactory.create(queryString) ;
 		QueryExecution qexec = QueryExecutionFactory.create(query, ontoModel);
 		ResultSet results = qexec.execSelect() ;
