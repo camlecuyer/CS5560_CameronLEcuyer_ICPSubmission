@@ -19,7 +19,7 @@ object Reasoning {
     }).toLocalIterator.toArray
 
     triples.foreach(ele => {
-      triples.foreach(ele1 => if(ele._1.compareTo(ele1._3) == 0  && ele._3.compareTo(ele1._1) == 0) {
+      triples.foreach(ele1 => if(ele._1.compareTo(ele1._3) == 0  && ele._3.compareTo(ele1._1) == 0 && ele._2.compareTo(ele1._2) == 0) {
         println(ele)
       })
     })
